@@ -1,8 +1,7 @@
 name: Refresh profile
 
-# Redraws the live figures (GitHub activity, languages, chess.com ratings) and
-# rewrites the README blocks for papers, recent repositories and NASA's picture
-# of the day. Runs every morning, on demand, and whenever the scripts change.
+# Redraws the animated activity figure and swaps in NASA's picture of the day.
+# Runs every morning, on demand, and whenever the scripts change.
 
 on:
   schedule:
@@ -12,7 +11,6 @@ on:
     branches: [main, master]
     paths:
       - "scripts/**"
-      - "data/papers.json"
       - "requirements.txt"
       - ".github/workflows/refresh.yml"
 
@@ -44,8 +42,9 @@ jobs:
       - name: Refresh live data
         env:
           # Optional secrets. STATS_TOKEN (a personal access token) lets the
-          # activity figure count private contributions; NASA_API_KEY avoids the
-          # shared DEMO_KEY rate limit. Both fall back gracefully when unset.
+          # activity figure count pull requests in private repositories;
+          # NASA_API_KEY avoids the shared DEMO_KEY rate limit. Both fall back
+          # gracefully when unset.
           STATS_TOKEN: ${{ secrets.STATS_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NASA_API_KEY: ${{ secrets.NASA_API_KEY }}
@@ -63,7 +62,7 @@ jobs:
             exit 0
           fi
           git commit -m "Refresh profile figures and README"
-          # A chess move may have landed meanwhile; replay on top of it.
+          # Another push may have landed meanwhile; replay on top of it.
           for attempt in 1 2 3 4 5; do
             git pull --rebase origin "$BRANCH" && git push origin "HEAD:$BRANCH" && exit 0
             sleep $((attempt * 5))

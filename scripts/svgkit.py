@@ -1,8 +1,8 @@
 """Shared helpers for every SVG in this profile.
 
-All figures are set in Latin Modern (the OpenType Computer Modern that LaTeX
-papers use). GitHub renders README SVGs through <img>, which blocks external
-font requests, so each SVG embeds a WOFF2 subset of only the glyphs it uses.
+Text is set in Latin Modern, the OpenType Computer Modern of LaTeX. GitHub
+renders README SVGs through <img>, which blocks external font requests, so
+each SVG embeds a WOFF2 subset of only the glyphs it uses.
 """
 
 from __future__ import annotations
@@ -10,7 +10,6 @@ from __future__ import annotations
 import base64
 import html
 import io
-from dataclasses import dataclass
 from pathlib import Path
 
 from fontTools import subset
@@ -23,59 +22,28 @@ FACES = {
     "rm": ("lmroman12-regular.otf", "LMRoman", "normal", "normal"),
     "it": ("lmroman12-italic.otf", "LMRoman", "italic", "normal"),
     "bf": ("lmroman12-bold.otf", "LMRoman", "normal", "bold"),
-    "sc": ("lmromancaps10-regular.otf", "LMRomanCaps", "normal", "normal"),
-    "dunh": ("lmromandunh10-regular.otf", "LMRomanDunh", "normal", "normal"),
-    # Greek and math symbols (Ly𝛼, 𝜆); the text faces have no Greek.
-    "math": ("latinmodern-math.otf", "LMMath", "normal", "normal"),
+    "tt": ("lmmono10-regular.otf", "LMMono", "normal", "normal"),
 }
 
-FALLBACK = "'Latin Modern Roman', 'CMU Serif', 'Computer Modern', Georgia, serif"
+FALLBACK = "'Latin Modern Roman', 'CMU Serif', Georgia, serif"
 
 
-@dataclass(frozen=True)
-class Theme:
-    name: str
-    surface: str  # card / figure background
-    sky: str  # hero background
-    ink: str
-    muted: str
-    faint: str  # grid lines, rules
-    accent: str  # the one data accent (spectrum line, highlights)
-    gold: str  # quasar light; second pole of the diverging pair
-    neutral: str  # diverging midpoint (draws)
-    glow: str  # non-data highlight: quasar core, stars
-    link: str  # hyperref-style link boxes
+class C:
+    """The palette: a deep-space night with violet and gold light."""
 
-
-DARK = Theme(
-    name="dark",
-    surface="#0F1736",
-    sky="#0E1433",
-    ink="#E8EBF7",
-    muted="#9AA2C6",
-    faint="#263063",
-    accent="#8B7BF5",
-    gold="#BC7E26",
-    neutral="#5D6487",
-    glow="#F6D9A6",
-    link="#4FD6E6",
-)
-
-LIGHT = Theme(
-    name="light",
-    surface="#F6F8FC",
-    sky="#F6F8FC",
-    ink="#141A33",
-    muted="#565E80",
-    faint="#D7DCEA",
-    accent="#5443D1",
-    gold="#A8650C",
-    neutral="#7D8399",
-    glow="#A8650C",
-    link="#0098AD",
-)
-
-THEMES = (DARK, LIGHT)
+    sky = "#0B1030"
+    sky_top = "#151E52"
+    panel = "#0F1736"
+    ink = "#E8EBF7"
+    muted = "#9AA2C6"
+    faint = "#263063"
+    violet = "#8B7BF5"
+    violet_hi = "#B7ADFF"
+    gold = "#E6B566"
+    glow = "#F6D9A6"
+    teal = "#5FD6C4"
+    rose = "#F08BA6"
+    disc = "#EEF0FA"
 
 
 def esc(text: str) -> str:
@@ -108,10 +76,7 @@ class Fonts:
         total = 0
         for ch in str(text):
             glyph = cmap.get(ord(ch))
-            if glyph is None:
-                total += upm * 0.5
-            else:
-                total += hmtx[glyph][0]
+            total += hmtx[glyph][0] if glyph else upm * 0.5
         return total * size / upm
 
     def family(self, face: str) -> str:
@@ -124,64 +89,27 @@ class Fonts:
             f'font-style="{style}" font-weight="{weight}" fill="{fill}" {extra}'
         ).strip()
 
-    def text(
-        self,
-        x: float,
-        y: float,
-        content: str,
-        face: str,
-        size: float,
-        fill: str,
-        anchor: str = "start",
-        extra: str = "",
-    ) -> str:
+    def text(self, x: float, y: float, content: str, face: str, size: float, fill: str,
+             anchor: str = "start", extra: str = "") -> str:
         self.use(face, content)
         return (
             f'<text x="{x:.1f}" y="{y:.1f}" text-anchor="{anchor}" '
             f"{self.style(face, size, fill, extra)}>{esc(content)}</text>"
         )
 
-    def rich_width(self, segments: list[tuple[str, str]], size: float) -> float:
-        return sum(self.width(face, text, size) for face, text in segments)
-
-    def rich(
-        self,
-        x: float,
-        y: float,
-        segments: list[tuple[str, str]],
-        size: float,
-        fill: str,
-        anchor: str = "start",
-        extra: str = "",
-    ) -> str:
-        """One <text> made of differently-faced runs, e.g. [("rm", "O "), ("sc", "vi")]."""
-        spans = []
-        for face, content in segments:
-            self.use(face, content)
-            _, _, style, weight = FACES[face]
-            spans.append(
-                f'<tspan font-family="{esc(self.family(face))}" font-style="{style}" '
-                f'font-weight="{weight}">{esc(content)}</tspan>'
-            )
-        return (
-            f'<text x="{x:.1f}" y="{y:.1f}" text-anchor="{anchor}" font-size="{size:g}" '
-            f'fill="{fill}" {extra}>{"".join(spans)}</text>'
-        )
-
     def css(self) -> str:
         rules = []
         for face, chars in sorted(self.used.items()):
             filename, family, style, weight = FACES[face]
-            chars = set(chars) | {" "}
             opts = subset.Options()
             opts.flavor = "woff2"
-            opts.layout_features = ["kern", "liga", "lnum", "onum", "smcp"]
+            opts.layout_features = ["kern", "liga", "lnum"]
             opts.name_IDs = []
             opts.notdef_outline = True
             opts.hinting = False
             opts.drop_tables = [*opts.drop_tables, "FFTM"]  # FontForge timestamp; not needed
             sub = subset.Subsetter(options=opts)
-            sub.populate(text="".join(sorted(chars)))
+            sub.populate(text="".join(sorted(set(chars) | {" "})))
             # Fixed timestamps keep the output byte-identical between runs.
             font = TTFont(FONT_DIR / filename, recalcTimestamp=False)
             sub.subset(font)
@@ -198,12 +126,16 @@ class Fonts:
         return "".join(rules)
 
 
-def document(width: int, height: int, body: str, fonts: Fonts, css: str = "", title: str = "") -> str:
+REDUCED_MOTION = "@media (prefers-reduced-motion:reduce){*{animation:none!important}}"
+
+
+def document(width: int, height: int, body: str, fonts: Fonts | None = None, css: str = "", title: str = "") -> str:
     head = f"<title>{esc(title)}</title>" if title else ""
+    font_css = fonts.css() if fonts else ""
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
         f'viewBox="0 0 {width} {height}" role="img" aria-label="{esc(title)}">'
-        f"{head}<style>{fonts.css()}{css}</style>{body}</svg>\n"
+        f"{head}<style>{font_css}{css}{REDUCED_MOTION}</style>{body}</svg>\n"
     )
 
 

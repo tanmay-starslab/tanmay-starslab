@@ -74,11 +74,11 @@
   ],
   [
    "2025-10-30",
-   5
+   6
   ],
   [
    "2025-10-31",
-   6
+   5
   ],
   [
    "2025-11-01",
@@ -110,7 +110,7 @@
   ],
   [
    "2025-11-08",
-   6
+   7
   ],
   [
    "2025-11-09",
@@ -118,7 +118,7 @@
   ],
   [
    "2025-11-10",
-   10
+   9
   ],
   [
    "2025-11-11",
@@ -834,11 +834,11 @@
   ],
   [
    "2026-05-08",
-   0
+   1
   ],
   [
    "2026-05-09",
-   25
+   24
   ],
   [
    "2026-05-10",
@@ -962,11 +962,11 @@
   ],
   [
    "2026-06-09",
-   5
+   6
   ],
   [
    "2026-06-10",
-   2
+   1
   ],
   [
    "2026-06-11",
@@ -998,11 +998,11 @@
   ],
   [
    "2026-06-18",
-   3
+   4
   ],
   [
    "2026-06-19",
-   1
+   0
   ],
   [
    "2026-06-20",
@@ -1206,11 +1206,11 @@
   ],
   [
    "2026-08-09",
-   2
+   3
   ],
   [
    "2026-08-10",
-   1
+   0
   ],
   [
    "2026-08-11",
@@ -1222,11 +1222,11 @@
   ],
   [
    "2026-08-13",
-   0
+   1
   ],
   [
    "2026-08-14",
-   1
+   0
   ],
   [
    "2026-08-15",
@@ -1274,19 +1274,19 @@
   ],
   [
    "2026-08-26",
-   10
+   11
   ],
   [
    "2026-08-27",
-   8
+   7
   ],
   [
    "2026-08-28",
-   5
+   6
   ],
   [
    "2026-08-29",
-   12
+   11
   ],
   [
    "2026-08-30",
@@ -1354,11 +1354,11 @@
   ],
   [
    "2026-09-15",
-   33
+   34
   ],
   [
    "2026-09-16",
-   43
+   42
   ],
   [
    "2026-09-17",
@@ -1462,7 +1462,7 @@
   ],
   [
    "2026-10-12",
-   44
+   45
   ],
   [
    "2026-10-13",
@@ -1470,140 +1470,10 @@
   ],
   [
    "2026-10-14",
-   25
+   24
   ]
  ],
- "pull_requests": 87,
+ "pull_requests": 130,
  "repo_count": 16,
- "repos": [
-  {
-   "description": "Profile README: live figures, arXiv papers, NASA APOD and a community chess game",
-   "language": "Python",
-   "name": "tanmay-starslab",
-   "pushed_at": "2026-10-14T10:47:10Z",
-   "stars": 0,
-   "url": "https://github.com/tanmay-starslab/tanmay-starslab"
-  },
-  {
-   "description": "S/N and resolving-power requirements for detecting and resolving CGM absorption components",
-   "language": "Python",
-   "name": "cgm-absorber-requirements",
-   "pushed_at": "2026-10-14T08:27:56Z",
-   "stars": 0,
-   "url": "https://github.com/tanmay-starslab/cgm-absorber-requirements"
-  },
-  {
-   "description": "My academic website",
-   "language": "JavaScript",
-   "name": "tanmay-starslab.github.io",
-   "pushed_at": "2026-10-14T04:47:00Z",
-   "stars": 2,
-   "url": "https://github.com/tanmay-starslab/tanmay-starslab.github.io"
-  },
-  {
-   "description": "A 2-minute Manim explainer: how JWST's spectral resolving power R becomes a velocity floor, dv = c/R. Built for an AST 591 seminar talk.",
-   "language": "Python",
-   "name": "jwst-velocity-resolution",
-   "pushed_at": "2026-08-31T18:16:13Z",
-   "stars": 0,
-   "url": "https://github.com/tanmay-starslab/jwst-velocity-resolution"
-  },
-  {
-   "description": "GPT built from scratch — assembled from my NeetCode ML course submissions",
-   "language": "Python",
-   "name": "neetcode-gpt",
-   "pushed_at": "2026-08-10T05:52:21Z",
-   "stars": 0,
-   "url": "https://github.com/tanmay-starslab/neetcode-gpt"
-  },
-  {
-   "description": "Analysis of Mock Absorption in M61",
-   "language": "Jupyter Notebook",
-   "name": "m61-tng",
-   "pushed_at": "2026-08-09T04:20:11Z",
-   "stars": 0,
-   "url": "https://github.com/tanmay-starslab/m61-tng"
-  },
-  {
-   "description": "Generate a publication-grade split-panel movie of background-quasar absorption spectroscopy probing the multiphase circumgalactic medium (CGM) of a simulated galaxy — yt off-axis projections + Trident synthetic ion spectra, parallelised on Slurm.",
-   "language": "Python",
-   "name": "cgm-absorption-movie",
-   "pushed_at": "2026-06-20T06:02:30Z",
-   "stars": 0,
-   "url": "https://github.com/tanmay-starslab/cgm-absorption-movie"
-  },
-  {
-   "description": "VS Code extension for relaying localhost OAuth callbacks to authentication listeners running in remote workspaces.",
-   "language": "JavaScript",
-   "name": "remote-loopback-auth-relay",
-   "pushed_at": "2026-05-22T22:11:47Z",
-   "stars": 0,
-   "url": "https://github.com/tanmay-starslab/remote-loopback-auth-relay"
-  },
-  {
-   "description": "Codes for TNG based mock spectra for COS-GASS survey",
-   "language": "HTML",
-   "name": "COS-GASS",
-   "pushed_at": "2026-02-03T20:06:34Z",
-   "stars": 0,
-   "url": "https://github.com/tanmay-starslab/COS-GASS"
-  },
-  {
-   "description": "This repository contains all the necessary files for the project on the analysis of synthetic OVI absorption associated with galaxy groups in SIMBA and Illustris-TNG except the raw data files from the simulation.",
-   "language": "Jupyter Notebook",
-   "name": "OVI_IGrM",
-   "pushed_at": "2026-01-20T22:19:09Z",
-   "stars": 0,
-   "url": "https://github.com/tanmay-starslab/OVI_IGrM"
-  },
-  {
-   "description": "TNG MW Kinematics ",
-   "language": "Jupyter Notebook",
-   "name": "tng-mw-kinematics-spec",
-   "pushed_at": "2025-11-30T02:48:25Z",
-   "stars": 0,
-   "url": "https://github.com/tanmay-starslab/tng-mw-kinematics-spec"
-  },
-  {
-   "description": "BLOG Language syntax highlighting for VS Code",
-   "language": "TypeScript",
-   "name": "blog-syntax",
-   "pushed_at": "2025-11-03T20:13:11Z",
-   "stars": 0,
-   "url": "https://github.com/tanmay-starslab/blog-syntax"
-  },
-  {
-   "description": "Ray Tracing and Synthetic Sightline Generation for TNG Simulations. ",
-   "language": "Python",
-   "name": "syn-sightline-tng",
-   "pushed_at": "2025-09-13T23:51:59Z",
-   "stars": 0,
-   "url": "https://github.com/tanmay-starslab/syn-sightline-tng"
-  },
-  {
-   "description": "testing repo",
-   "language": "Python",
-   "name": "mygeopy",
-   "pushed_at": "2025-09-07T14:29:01Z",
-   "stars": 0,
-   "url": "https://github.com/tanmay-starslab/mygeopy"
-  },
-  {
-   "description": "repo containing ml and data science projects ",
-   "language": null,
-   "name": "ml_projects",
-   "pushed_at": "2025-06-10T22:07:06Z",
-   "stars": 0,
-   "url": "https://github.com/tanmay-starslab/ml_projects"
-  },
-  {
-   "description": "",
-   "language": "Jupyter Notebook",
-   "name": "tanmaysingh-astro",
-   "pushed_at": "2023-09-04T23:19:02Z",
-   "stars": 0,
-   "url": "https://github.com/tanmay-starslab/tanmaysingh-astro"
-  }
- ],
  "total_contributions": 782
 }
