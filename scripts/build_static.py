@@ -139,10 +139,10 @@ def hero() -> str:
 
     defs = f"""<defs>
 <radialGradient id="sky" cx="50%" cy="35%" r="75%"><stop offset="0" stop-color="{C.sky_top}"/><stop offset="1" stop-color="{C.sky}"/></radialGradient>
-<radialGradient id="nebV"><stop offset="0" stop-color="{C.violet}" stop-opacity=".30"/><stop offset="1" stop-color="{C.violet}" stop-opacity="0"/></radialGradient>
-<radialGradient id="nebT"><stop offset="0" stop-color="{C.teal}" stop-opacity=".16"/><stop offset="1" stop-color="{C.teal}" stop-opacity="0"/></radialGradient>
-<radialGradient id="nebR"><stop offset="0" stop-color="{C.rose}" stop-opacity=".16"/><stop offset="1" stop-color="{C.rose}" stop-opacity="0"/></radialGradient>
-<radialGradient id="halo"><stop offset="0" stop-color="{C.violet}" stop-opacity=".20"/><stop offset=".7" stop-color="{C.violet}" stop-opacity=".07"/><stop offset="1" stop-color="{C.violet}" stop-opacity="0"/></radialGradient>
+<radialGradient id="nebV"><stop offset="0" stop-color="{C.violet}" stop-opacity=".14"/><stop offset="1" stop-color="{C.violet}" stop-opacity="0"/></radialGradient>
+<radialGradient id="nebT"><stop offset="0" stop-color="{C.gold}" stop-opacity=".08"/><stop offset="1" stop-color="{C.gold}" stop-opacity="0"/></radialGradient>
+<radialGradient id="nebR"><stop offset="0" stop-color="{C.rose}" stop-opacity=".09"/><stop offset="1" stop-color="{C.rose}" stop-opacity="0"/></radialGradient>
+<radialGradient id="halo"><stop offset="0" stop-color="{C.violet}" stop-opacity=".13"/><stop offset=".7" stop-color="{C.violet}" stop-opacity=".05"/><stop offset="1" stop-color="{C.violet}" stop-opacity="0"/></radialGradient>
 <radialGradient id="disk"><stop offset="0" stop-color="{C.violet_hi}" stop-opacity=".35"/><stop offset="1" stop-color="{C.violet_hi}" stop-opacity="0"/></radialGradient>
 <radialGradient id="core"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".35" stop-color="{C.glow}" stop-opacity=".9"/><stop offset="1" stop-color="{C.glow}" stop-opacity="0"/></radialGradient>
 <radialGradient id="qso"><stop offset="0" stop-color="{C.glow}" stop-opacity=".95"/><stop offset="1" stop-color="{C.glow}" stop-opacity="0"/></radialGradient>
@@ -280,7 +280,7 @@ def chip(kind: str, label: str) -> str:
     w = 56 + fonts.width("rm", label, size) + 20
     h = 44
     body = (
-        f'<rect x="1" y="1" width="{w - 2:.1f}" height="{h - 2}" rx="21" fill="{C.panel}" stroke="#2A3466" stroke-width="1.2"/>'
+        f'<rect x="1" y="1" width="{w - 2:.1f}" height="{h - 2}" rx="21" fill="{C.panel}" stroke="{C.edge}" stroke-width="1.2"/>'
         f'<g transform="translate(30 22)">{chip_icon(kind)}</g>'
         + fonts.text(52, 29, label, "rm", size, C.ink)
     )
@@ -289,7 +289,7 @@ def chip(kind: str, label: str) -> str:
 
 # --------------------------------------------------------------------------- tool orbits
 
-TOOLS_W, TOOLS_H = 1200, 660
+TOOLS_W, TOOLS_H = 1200, 570
 SQUASH = 0.42
 RINGS = [
     # radius, period (s), stroke colour, items: (icon file or None, glyph label)
@@ -381,11 +381,11 @@ def tools() -> str:
 
 
 def footer() -> str:
-    W, H = 1200, 230
+    W, H = 1200, 170
     rng = random.Random(11)
-    stars, star_css = starfield(rng, W, 150, 120, 5)
+    stars, star_css = starfield(rng, W, 110, 100, 5)
     ribbons = []
-    for i, (color, amp, y0, dur) in enumerate(((C.teal, 18, 70, 26), (C.violet, 24, 95, 34), (C.rose, 14, 60, 42))):
+    for i, (color, amp, y0, dur) in enumerate(((C.teal, 16, 44, 26), (C.violet, 20, 64, 34), (C.rose, 12, 36, 42))):
         pts = []
         for x in range(0, 2 * W + 1, 20):
             y = y0 + amp * math.sin(2 * math.pi * x / 600 + i) + 8 * math.sin(2 * math.pi * x / 240 + 2 * i)
@@ -411,10 +411,10 @@ def footer() -> str:
         "</defs>"
         f'<rect width="{W}" height="{H}" rx="22" fill="url(#fsky)"/>'
         + stars + "".join(ribbons)
-        + f'<path d="M0,{H - 18} Q300,{H - 46} 600,{H - 22} T1200,{H - 30} V{H} H0 Z" fill="#080C24"/>'
-        + f'<path d="{" ".join(trees)}" fill="#060918"/>'
-        + f'<g transform="translate({dome_x} {H - 40})"><rect x="-30" y="0" width="60" height="30" fill="#060918"/>'
-        f'<path d="M-34,2 A34,34 0 0 1 34,2 Z" fill="#0A0F2C"/><rect class="slit" x="-5" y="-30" width="10" height="30" fill="{C.glow}" opacity=".5"/></g>'
+        + f'<path d="M0,{H - 18} Q300,{H - 46} 600,{H - 22} T1200,{H - 30} V{H} H0 Z" fill="#09090B"/>'
+        + f'<path d="{" ".join(trees)}" fill="#050506"/>'
+        + f'<g transform="translate({dome_x} {H - 40})"><rect x="-30" y="0" width="60" height="30" fill="#050506"/>'
+        f'<path d="M-34,2 A34,34 0 0 1 34,2 Z" fill="#0D0D10"/><rect class="slit" x="-5" y="-30" width="10" height="30" fill="{C.glow}" opacity=".5"/></g>'
     )
     css = (star_css
            + "@keyframes rib{to{transform:translateX(-600px)}}.rib{animation:rib 30s linear infinite}"

@@ -36,7 +36,7 @@ ORBIT_ROT = np.radians(-70)  # turn the orbit so the approach runs across the fr
 DRAG = 0.55  # dynamical-friction stand-in, acting on the nuclei near each other
 TILT = np.radians(35)  # viewing angle above the orbital plane
 
-BG = np.array([11, 16, 44], float)
+BG = np.array([10, 10, 12], float)
 COLOR_A = np.array([120, 110, 255], float)  # violet
 COLOR_B = np.array([255, 170, 70], float)  # gold
 

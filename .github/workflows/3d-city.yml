@@ -1,8 +1,8 @@
 name: 3D contribution city
 
 # Turns the contribution calendar into an isometric city at night
-# (yoshi389111/github-profile-3d-contrib) and commits the SVGs to
-# profile-3d-contrib/, which the README shows.
+# (yoshi389111/github-profile-3d-contrib), in the colours set by
+# data/city-settings.json, and commits it to profile-3d-contrib/.
 
 on:
   schedule:
@@ -12,6 +12,7 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/3d-city.yml"
+      - "data/city-settings.json"
 
 permissions:
   contents: write
@@ -33,6 +34,7 @@ jobs:
           # STATS_TOKEN (optional) lets the city count private contributions.
           GITHUB_TOKEN: ${{ secrets.STATS_TOKEN || secrets.GITHUB_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
+          SETTING_JSON: data/city-settings.json
 
       - name: Commit and push
         env:

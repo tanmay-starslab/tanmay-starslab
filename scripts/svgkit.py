@@ -29,14 +29,15 @@ FALLBACK = "'Latin Modern Roman', 'CMU Serif', Georgia, serif"
 
 
 class C:
-    """The palette: a deep-space night with violet and gold light."""
+    """The palette: neutral near-black night with violet and gold light."""
 
-    sky = "#0B1030"
-    sky_top = "#151E52"
-    panel = "#0F1736"
-    ink = "#E8EBF7"
-    muted = "#9AA2C6"
-    faint = "#263063"
+    sky = "#0A0A0C"
+    sky_top = "#17171B"
+    panel = "#121215"
+    ink = "#EDEDF0"
+    muted = "#9A9AA6"
+    faint = "#2A2A31"
+    edge = "#2E2E36"
     violet = "#8B7BF5"
     violet_hi = "#B7ADFF"
     gold = "#E6B566"

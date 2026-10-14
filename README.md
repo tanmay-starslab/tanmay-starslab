@@ -11,8 +11,6 @@
   <a href="mailto:tsingh65@asu.edu"><img src="assets/chips/email.svg" height="40" alt="Email"></a>
 </p>
 
-<br>
-
 <img align="right" src="assets/pixel/coder.gif" width="44%" alt="Pixel art: a coder typing at a desk under a starry window.">
 
 ### hey there <img src="assets/pixel/astronaut.gif" width="40" alt="">
@@ -30,21 +28,16 @@ class Me(PhDStudent):
 <img src="assets/pixel/cat.gif" width="56" alt=""> <em>always happy to talk galaxies and code, so say hi!</em>
 
 <br clear="right">
-<br>
 
 <h3 align="center"><img src="assets/pixel/planet.gif" width="40" alt=""> toolbox</h3>
 
 <img src="assets/tools.svg" width="100%" alt="My tools orbiting a star. Inner orbit: Python, JavaScript, TypeScript, Bash, LaTeX. Middle: NumPy, SciPy, pandas, Matplotlib, Jupyter, Astropy, PyTorch, scikit-learn. Outer: yt, Git, Trident, GitHub Actions, h5py, Linux, Manim, VS Code, Slurm, OpenCV.">
 
-<br>
-
 <h3 align="center"><img src="assets/pixel/chart.gif" width="40" alt=""> activity</h3>
 
 <img src="assets/generated/stats.svg" width="100%" alt="My GitHub activity this year: contributions, active days, pull requests and public repositories, over a line of weekly contributions.">
 
-<img src="profile-3d-contrib/profile-night-view.svg" width="100%" alt="My contribution calendar as a 3D city at night.">
-
-<br>
+<img src="profile-3d-contrib/profile-night.svg" width="100%" alt="My contribution calendar as a 3D city at night, with the buildings growing in.">
 
 <h3 align="center"><img src="assets/pixel/telescope.gif" width="40" alt=""> tonight's sky</h3>
 
@@ -58,4 +51,12 @@ class Me(PhDStudent):
 
 <img src="assets/footer.svg" width="100%" alt="An aurora drifting over an observatory at night.">
 
-<p align="right"><img src="https://komarev.com/ghpvc/?username=tanmay-starslab&color=8b7bf5&style=flat-square&label=visitors" alt="Visitors"></p>
+<p align="center">
+  <img src="https://visitor-badge.laobi.icu/badge?page_id=tanmay-starslab.tanmay-starslab&left_color=%2316161A&right_color=%23E6B566&left_text=visitors" alt="Visitors">
+  <a href="https://github.com/tanmay-starslab?tab=followers"><img src="https://img.shields.io/github/followers/tanmay-starslab?style=flat-square&label=followers&labelColor=16161A&color=8B7BF5" alt="Followers"></a>
+  <a href="https://github.com/tanmay-starslab?tab=repositories"><img src="https://img.shields.io/github/stars/tanmay-starslab?affiliations=OWNER&style=flat-square&label=stars&labelColor=16161A&color=8B7BF5" alt="Stars"></a>
+  <img src="assets/generated/moon.svg" alt="Tonight's moon phase">
+  <img src="assets/generated/sunset.svg" alt="Sunset time in Tempe today">
+  <img src="https://img.shields.io/github/last-commit/tanmay-starslab/tanmay-starslab?style=flat-square&label=last%20refresh&labelColor=16161A&color=5FD6C4" alt="Last refresh">
+  <a href="https://github.com/tanmay-starslab/tanmay-starslab/actions/workflows/refresh.yml"><img src="https://img.shields.io/github/actions/workflow/status/tanmay-starslab/tanmay-starslab/refresh.yml?style=flat-square&label=daily%20refresh&labelColor=16161A" alt="Daily refresh status"></a>
+</p>

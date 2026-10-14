@@ -1,4 +1,5 @@
-"""Refresh the live parts of the profile: the activity figure and NASA's picture.
+"""Refresh the live parts of the profile: the activity figure, NASA's picture
+and the sky badges (tonight's moon, sunset in Tempe).
 
 Each source is fetched independently. A source that fails keeps its last
 good data from data/cache/, so one flaky API never blanks a section.
@@ -11,6 +12,7 @@ from __future__ import annotations
 import datetime as dt
 import html
 import json
+import math
 import os
 import re
 import sys
@@ -133,7 +135,7 @@ def num(n: int) -> str:
 def stats_figure(gh: dict) -> str:
     """Rolling-digit counters over a weekly activity line that draws itself."""
     fonts = Fonts()
-    W, H, size = 1200, 300, 60
+    W, H, size = 1200, 228, 60
     days = gh["days"]
     active = sum(1 for _, c in days if c > 0)
     weeks = [sum(c for _, c in days[i : i + 7]) for i in range(0, len(days), 7)]
@@ -163,7 +165,7 @@ def stats_figure(gh: dict) -> str:
     digit_w = fonts.width("rm", "0", size)
     col = 0
     for i, (value, label) in enumerate(counters):
-        cx, base = 150 + 300 * i, 104
+        cx, base = 150 + 300 * i, 84
         text = num(value)
         x = cx - fonts.width("rm", text, size) / 2
         for ch in text:
@@ -192,7 +194,7 @@ def stats_figure(gh: dict) -> str:
         parts.append(fonts.text(cx, base + 36, label, "it", 20, C.muted, "middle"))
 
     # Weekly contributions, drawn like a spectrum.
-    x0, x1, y0, y1 = 70, 1130, 190, 274
+    x0, x1, y0, y1 = 70, 1130, 140, 206
     top = max(weeks) or 1
     pts = [(x0 + (x1 - x0) * i / (len(weeks) - 1), y1 - (y1 - y0) * v / top) for i, v in enumerate(weeks)]
     d = f"M{pts[0][0]:.1f},{pts[0][1]:.1f}" + "".join(
@@ -234,11 +236,94 @@ def apod_block(apod: dict | None) -> str:
     )
 
 
+# --------------------------------------------------------------------------- sky badges
+
+TEMPE = (33.4255, -111.9400)
+MST = dt.timezone(dt.timedelta(hours=-7), "MST")  # Arizona keeps standard time all year
+SYNODIC = 29.530588853
+NEW_MOON_JD = 2451550.1  # 2000-01-06 18:14 UTC
+
+
+def julian_day(t: dt.datetime) -> float:
+    return t.timestamp() / 86400.0 + 2440587.5
+
+
+def moon_tonight(day: dt.date) -> tuple[float, float, str]:
+    """Phase (0 = new, 0.5 = full), illuminated fraction and name at 9 p.m. in Tempe.
+
+    A mean synodic month is good to about half a day, plenty for a name.
+    """
+    t = dt.datetime.combine(day, dt.time(21, 0), MST)
+    phase = ((julian_day(t) - NEW_MOON_JD) / SYNODIC) % 1.0
+    lit = (1 - math.cos(2 * math.pi * phase)) / 2
+    names = [(0.034, "new moon"), (0.216, "waxing crescent"), (0.284, "first quarter"), (0.466, "waxing gibbous"),
+             (0.534, "full moon"), (0.716, "waning gibbous"), (0.784, "last quarter"), (0.966, "waning crescent"),
+             (1.001, "new moon")]
+    return phase, lit, next(name for limit, name in names if phase < limit)
+
+
+def sunset(day: dt.date, lat: float, lon: float) -> dt.datetime:
+    """Sunset from the standard sunrise equation (good to within a few minutes)."""
+    jd = julian_day(dt.datetime.combine(day, dt.time(12, 0), MST))
+    n = round(jd - 2451545.0 + 0.0008)
+    j_star = n - lon / 360.0
+    m = math.radians((357.5291 + 0.98560028 * j_star) % 360)
+    c = 1.9148 * math.sin(m) + 0.0200 * math.sin(2 * m) + 0.0003 * math.sin(3 * m)
+    lam = math.radians((math.degrees(m) + c + 180 + 102.9372) % 360)
+    transit = 2451545.0 + j_star + 0.0053 * math.sin(m) - 0.0069 * math.sin(2 * lam)
+    dec = math.asin(math.sin(lam) * math.sin(math.radians(23.4397)))
+    phi = math.radians(lat)
+    cos_w = (math.sin(math.radians(-0.833)) - math.sin(phi) * math.sin(dec)) / (math.cos(phi) * math.cos(dec))
+    j_set = transit + math.degrees(math.acos(max(-1.0, min(1.0, cos_w)))) / 360.0
+    return dt.datetime.fromtimestamp((j_set - 2440587.5) * 86400, dt.timezone.utc).astimezone(MST)
+
+
+def badge(label: str, value: str, color: str, dark_text: bool, icon: str = "", title: str = "") -> str:
+    """A flat-square badge drawn to sit beside the shields.io ones in the same row."""
+    char = 6.7  # Verdana at 11 px, as shields.io uses
+    icon_w = 16 if icon else 0
+    lw = round(len(label) * char + 12)
+    vw = round(len(value) * char + 12 + icon_w)
+    text = "#16161A" if dark_text else "#FFFFFF"
+    body = (
+        f'<rect width="{lw}" height="20" fill="#16161A"/><rect x="{lw}" width="{vw}" height="20" fill="{color}"/>'
+        f'<g font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11" text-rendering="geometricPrecision">'
+        f'<text x="{lw / 2:.1f}" y="14" text-anchor="middle" fill="#FFFFFF">{esc(label)}</text>'
+        f'<text x="{lw + icon_w + (vw - icon_w) / 2:.1f}" y="14" text-anchor="middle" fill="{text}">{esc(value)}</text></g>'
+        + (f'<g transform="translate({lw + 11} 10)">{icon}</g>' if icon else "")
+    )
+    return document(lw + vw, 20, body, None, "", title=title or f"{label}: {value}")
+
+
+def moon_icon(phase: float) -> str:
+    """A 12 px moon with the terminator drawn as an ellipse."""
+    r = 5.5
+    k = math.cos(2 * math.pi * phase)  # 1 at new moon, -1 at full
+    waxing = phase < 0.5
+    # The lit limb is on the right while waxing, on the left while waning.
+    limb = f"M0,{-r} A{r},{r} 0 0 {1 if waxing else 0} 0,{r}"
+    term = f"A{abs(k) * r:.2f},{r} 0 0 {(0 if waxing else 1) if k > 0 else (1 if waxing else 0)} 0,{-r} Z"
+    return (f'<circle r="{r}" fill="#3A3A44"/><path d="{limb} {term}" fill="#FFF6DD"/>'
+            f'<circle r="{r}" fill="none" stroke="#16161A" stroke-width=".6"/>')
+
+
+def sky_badges(day: dt.date) -> dict[str, str]:
+    phase, lit, name = moon_tonight(day)
+    sun = sunset(day, *TEMPE)
+    clock = sun.strftime("%I:%M %p").lstrip("0").lower()
+    return {
+        "moon.svg": badge("moon tonight", f"{name} {round(lit * 100)}%", "#E6B566", True, moon_icon(phase)),
+        "sunset.svg": badge("Tempe sunset", clock, "#F08BA6", True, title=f"Sunset in Tempe, Arizona: {clock}"),
+    }
+
+
 def main() -> int:
     gh = cached("github", fetch_github)
     apod = cached("apod", fetch_apod)
     if gh:
         write(GENERATED / "stats.svg", stats_figure(gh))
+    for name, svg in sky_badges(dt.datetime.now(MST).date()).items():
+        write(GENERATED / name, svg)
     changed = readme.update({"APOD": apod_block(apod)})
     print("README updated" if changed else "README unchanged")
     return 0
