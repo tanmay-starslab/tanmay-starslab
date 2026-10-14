@@ -1,0 +1,53 @@
+name: 3D contribution city
+
+# Turns the contribution calendar into an isometric city at night
+# (yoshi389111/github-profile-3d-contrib) and commits the SVGs to
+# profile-3d-contrib/, which the README shows.
+
+on:
+  schedule:
+    - cron: "37 6 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/3d-city.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: city
+  cancel-in-progress: false
+
+jobs:
+  city:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: yoshi389111/github-profile-3d-contrib@v0.9.3
+        env:
+          # STATS_TOKEN (optional) lets the city count private contributions.
+          GITHUB_TOKEN: ${{ secrets.STATS_TOKEN || secrets.GITHUB_TOKEN }}
+          USERNAME: ${{ github.repository_owner }}
+
+      - name: Commit and push
+        env:
+          BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add profile-3d-contrib
+          if git diff --cached --quiet; then
+            echo "Nothing changed."
+            exit 0
+          fi
+          git commit -m "Redraw the 3D contribution city"
+          for attempt in 1 2 3 4 5; do
+            git pull --rebase origin "$BRANCH" && git push origin "HEAD:$BRANCH" && exit 0
+            sleep $((attempt * 5))
+          done
+          exit 1

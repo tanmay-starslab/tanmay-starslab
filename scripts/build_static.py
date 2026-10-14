@@ -3,8 +3,8 @@
     python scripts/build_static.py
 
 Everything here is wordless or nearly so: the hero, the typing line, the
-link chips, the tool orbits, the spectrum divider, the section stickers and
-the aurora footer. Animations are CSS keyframes, which GitHub plays inside
+link chips, the tool orbits and the aurora footer. (The pixel-art GIFs come
+from make_pixel_gifs.py, the galaxy merger from make_merger.py.) Animations are CSS keyframes, which GitHub plays inside
 <img>; each file also honours prefers-reduced-motion.
 """
 
@@ -205,9 +205,9 @@ def hero() -> str:
 # --------------------------------------------------------------------------- typing line
 
 PHRASES = [
-    "tracing quasar sightlines through galaxies",
-    "turning TNG50 particles into spectra",
-    "fitting Voigt profiles at 3 a.m.",
+    "tracing quasar light through galaxies",
+    "turning simulations into spectra",
+    "debugging at 3 a.m.",
     "git push origin main",
 ]
 
@@ -267,14 +267,11 @@ def chip_icon(kind: str) -> str:
     if kind == "email":
         return (f'<g fill="none" stroke="{s}" stroke-width="1.6" stroke-linejoin="round">'
                 f'<rect x="-10" y="-7" width="20" height="14" rx="2"/><path d="M-10,-6 L0,2 L10,-6"/></g>')
-    if kind == "cv":
-        return (f'<g fill="none" stroke="{s}" stroke-width="1.6" stroke-linejoin="round">'
-                f'<path d="M-7,-10 H3 L8,-5 V10 H-7 Z M3,-10 V-5 H8"/><path d="M-3,0 H4 M-3,4 H4"/></g>')
     icon = icon_inner({"scholar": "googlescholar", "linkedin": "linkedin-plain"}[kind], 20)
     return f'<g fill="{s}">{icon}</g>'
 
 
-CHIPS = [("website", "website"), ("scholar", "scholar"), ("linkedin", "linkedin"), ("email", "email"), ("cv", "cv")]
+CHIPS = [("website", "website"), ("scholar", "scholar"), ("linkedin", "linkedin"), ("email", "email")]
 
 
 def chip(kind: str, label: str) -> str:
@@ -380,97 +377,6 @@ def tools() -> str:
                           "h5py, Linux, Manim, VS Code, Slurm, OpenCV")
 
 
-# --------------------------------------------------------------------------- spectrum divider
-
-
-def divider() -> str:
-    W, H, period = 1200, 46, 600
-    rng = random.Random(3)
-    lines = [(rng.uniform(0, period), rng.uniform(0.2, 0.75), rng.uniform(1.6, 3.4)) for _ in range(12)]
-    pts = []
-    for i in range(0, 3 * period + 1, 2):
-        x = i % period
-        f = 1.0 + 0.06 * math.sin(2 * math.pi * i / period * 2)
-        for c, depth, s in lines:
-            for shift in (-period, 0, period):
-                f -= depth * math.exp(-0.5 * ((x - c - shift) / s) ** 2)
-        pts.append(f"{i},{H / 2 + 14 - 22 * max(f, 0.0):.1f}")
-    d = "M" + " L".join(pts)
-    body = (
-        f'<defs><linearGradient id="fade" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/>'
-        f'<stop offset=".15" stop-color="#fff"/><stop offset=".85" stop-color="#fff"/>'
-        f'<stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>'
-        f'<mask id="m"><rect width="{W}" height="{H}" fill="url(#fade)"/></mask></defs>'
-        f'<g mask="url(#m)"><path class="scroll" d="{d}" fill="none" stroke="{C.violet}" stroke-opacity=".75" stroke-width="1.3" '
-        f'stroke-linejoin="round"/></g>'
-    )
-    css = f"@keyframes scroll{{to{{transform:translateX(-{period}px)}}}}.scroll{{animation:scroll 22s linear infinite}}"
-    return document(W, H, body, None, css, title="A scrolling absorption spectrum")
-
-
-# --------------------------------------------------------------------------- stickers
-
-
-def sticker(kind: str) -> str:
-    S = 96
-    css = ""
-    if kind == "rocket":
-        body = (
-            f'<g class="bob"><g transform="translate(48 46) rotate(35)">'
-            f'<path class="flame" d="M-7,22 Q0,44 7,22 Z" fill="{C.gold}"/>'
-            f'<path d="M0,-30 C12,-18 13,4 9,22 H-9 C-13,4 -12,-18 0,-30 Z" fill="{C.disc}"/>'
-            f'<circle cy="-6" r="5.5" fill="{C.violet}" stroke="{C.sky}" stroke-width="2"/>'
-            f'<path d="M-9,10 L-18,24 L-9,22 Z M9,10 L18,24 L9,22 Z" fill="{C.violet}"/></g></g>'
-            + "".join(f'<circle class="puff" cx="{30 - i * 6}" cy="{72 + i * 5}" r="{3 + i}" fill="{C.muted}" '
-                      f'style="animation-delay:{i * 0.25}s"/>' for i in range(3))
-        )
-        css = ("@keyframes bob{0%,100%{transform:translate(0,0)}50%{transform:translate(2px,-5px)}}.bob{animation:bob 2.4s ease-in-out infinite}"
-               "@keyframes flame{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.6)}}"
-               ".flame{transform-box:fill-box;transform-origin:50% 0;animation:flame .25s ease-in-out infinite}"
-               "@keyframes puff{0%{opacity:.7;transform:translate(0,0)}100%{opacity:0;transform:translate(-10px,10px)}}"
-               ".puff{opacity:0;animation:puff 1.2s ease-out infinite}")
-    elif kind == "planet":
-        body = (
-            f'<defs><radialGradient id="p" cx="35%" cy="35%"><stop offset="0" stop-color="{C.glow}"/>'
-            f'<stop offset="1" stop-color="#B9772A"/></radialGradient></defs>'
-            f'<g transform="translate(48 48) rotate(-18)">'
-            f'<path d="M-40,0 A40,11 0 0 1 40,0" fill="none" stroke="{C.violet_hi}" stroke-width="4" opacity=".75"/>'
-            f'<circle r="22" fill="url(#p)"/>'
-            f'<path d="M40,0 A40,11 0 0 1 -40,0" fill="none" stroke="{C.violet_hi}" stroke-width="4"/></g>'
-            f'<g transform="translate(48 48) scale(1 .4)"><g class="moon"><circle cx="44" cy="0" r="5.5" fill="{C.disc}" '
-            f'transform="scale(1 2.5)"/></g></g>'
-        )
-        css = "@keyframes moon{to{transform:rotate(360deg)}}.moon{animation:moon 4s linear infinite}"
-    elif kind == "pulsar":
-        beam = '<path d="M0,0 L-9,-46 Q0,-50 9,-46 Z" fill="url(#beam)"/>'
-        body = (
-            f'<defs><linearGradient id="beam" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="{C.violet_hi}"/>'
-            f'<stop offset="1" stop-color="{C.violet_hi}" stop-opacity="0"/></linearGradient>'
-            f'<radialGradient id="gl"><stop offset="0" stop-color="{C.violet_hi}" stop-opacity=".8"/>'
-            f'<stop offset="1" stop-color="{C.violet_hi}" stop-opacity="0"/></radialGradient></defs>'
-            f'<g transform="translate(48 48)"><circle class="ring" r="24" fill="url(#gl)"/>'
-            f'<g class="beams">{beam}<g transform="rotate(180)">{beam}</g></g>'
-            f'<circle r="7" fill="#FFFFFF"/></g>'
-        )
-        css = ("@keyframes beams{to{transform:rotate(360deg)}}.beams{animation:beams 2.2s linear infinite}"
-               "@keyframes ring{0%,100%{opacity:.4;transform:scale(.8)}50%{opacity:1;transform:scale(1.1)}}"
-               ".ring{animation:ring 1.1s ease-in-out infinite}")
-    else:  # telescope
-        body = (
-            f'<g transform="translate(40 58)"><g class="scope">'
-            f'<rect x="-6" y="-30" width="13" height="44" rx="3" fill="{C.disc}" transform="rotate(48)"/>'
-            f'<rect x="-8" y="-36" width="17" height="10" rx="2" fill="{C.violet}" transform="rotate(48)"/></g>'
-            f'<path d="M0,6 L-14,32 M0,6 L14,32 M0,6 V32" stroke="{C.muted}" stroke-width="3" stroke-linecap="round"/></g>'
-            f'<path class="star" d="M76,12 l2.5,7 7,2.5 -7,2.5 -2.5,7 -2.5,-7 -7,-2.5 7,-2.5 Z" fill="{C.glow}"/>'
-        )
-        css = ("@keyframes scope{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(5deg)}}"
-               ".scope{animation:scope 5s ease-in-out infinite}"
-               "@keyframes star{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}"
-               ".star{transform-box:fill-box;transform-origin:center;animation:star 1.8s ease-in-out infinite}")
-    badge = f'<circle cx="48" cy="48" r="46" fill="{C.sky_top}"/><circle cx="48" cy="48" r="45" fill="none" stroke="#2A3466" stroke-width="2"/>'
-    return document(S, S, badge + body, None, css, title=kind)
-
-
 # --------------------------------------------------------------------------- footer
 
 
@@ -523,13 +429,10 @@ def main() -> None:
         ASSETS / "hero.svg": hero(),
         ASSETS / "typing.svg": typing(),
         ASSETS / "tools.svg": tools(),
-        ASSETS / "divider.svg": divider(),
         ASSETS / "footer.svg": footer(),
     }
     for kind, label in CHIPS:
         outputs[ASSETS / "chips" / f"{kind}.svg"] = chip(kind, label)
-    for kind in ("rocket", "planet", "pulsar", "telescope"):
-        outputs[ASSETS / "stickers" / f"{kind}.svg"] = sticker(kind)
     for path, content in outputs.items():
         if write(path, content):
             print(f"wrote {path.relative_to(ROOT)} ({len(content) / 1000:.0f} kB)")

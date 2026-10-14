@@ -214,13 +214,22 @@ def stats_figure(gh: dict) -> str:
 # --------------------------------------------------------------------------- README blocks
 
 
+MERGER = (
+    '<img src="assets/merger.webp" width="48%" alt="Two disk galaxies collide, throw out tidal tails '
+    'and merge: a simulation written for this page.">'
+)
+
+
 def apod_block(apod: dict | None) -> str:
+    """Today's real sky (NASA's picture of the day) beside a simulated one."""
     if not apod:
-        return '<p align="center"><sub>NASA\'s picture of the day will be back on the next refresh.</sub></p>'
+        return f'<p align="center">\n  {MERGER}\n</p>'
     return (
         '<p align="center">\n'
-        f'  <a href="https://science.nasa.gov/apod/"><img src="{esc(apod["image"])}" width="86%" alt="{esc(apod["title"])}"></a>\n'
-        f'  <br><sub><b>{html.escape(apod["title"], quote=False)}</b></sub>\n'
+        f'  <a href="https://science.nasa.gov/apod/"><img src="{esc(apod["image"])}" width="48%" alt="{esc(apod["title"])}"></a>\n'
+        f"  {MERGER}\n"
+        f'  <br><sub>real: <b>{html.escape(apod["title"], quote=False)}</b> (NASA APOD)'
+        " &nbsp;·&nbsp; simulated: two galaxies merging</sub>\n"
         "</p>"
     )
 
