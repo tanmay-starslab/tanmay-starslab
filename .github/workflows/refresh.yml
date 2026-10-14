@@ -1,0 +1,71 @@
+name: Refresh profile
+
+# Redraws the live figures (GitHub activity, languages, chess.com ratings) and
+# rewrites the README blocks for papers, recent repositories and NASA's picture
+# of the day. Runs every morning, on demand, and whenever the scripts change.
+
+on:
+  schedule:
+    - cron: "17 7 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+    paths:
+      - "scripts/**"
+      - "data/papers.json"
+      - "requirements.txt"
+      - ".github/workflows/refresh.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Rebuild static figures
+        run: python scripts/build_static.py
+
+      - name: Refresh live data
+        env:
+          # Optional secrets. STATS_TOKEN (a personal access token) lets the
+          # activity figure count private contributions; NASA_API_KEY avoids the
+          # shared DEMO_KEY rate limit. Both fall back gracefully when unset.
+          STATS_TOKEN: ${{ secrets.STATS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NASA_API_KEY: ${{ secrets.NASA_API_KEY }}
+        run: python scripts/refresh.py
+
+      - name: Commit and push
+        env:
+          BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md assets data
+          if git diff --cached --quiet; then
+            echo "Nothing changed."
+            exit 0
+          fi
+          git commit -m "Refresh profile figures and README"
+          # A chess move may have landed meanwhile; replay on top of it.
+          for attempt in 1 2 3 4 5; do
+            git pull --rebase origin "$BRANCH" && git push origin "HEAD:$BRANCH" && exit 0
+            sleep $((attempt * 5))
+          done
+          exit 1
