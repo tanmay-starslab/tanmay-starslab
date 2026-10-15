@@ -1,0 +1,48 @@
+name: Watchdog
+
+# Safety net for the automatic updates (see scripts/watchdog.py): re-enables
+# disabled workflows, re-runs any that have fallen behind, and opens an issue
+# if the profile stays stale for more than a day. The issue closes itself
+# when things recover.
+
+on:
+  schedule:
+    - cron: "53 */2 * * *"
+  workflow_dispatch:
+    inputs:
+      simulate_stale:
+        description: "Pretend everything is stale, to test the alert issue"
+        type: boolean
+        default: false
+  repository_dispatch:
+    types: [refresh-profile]
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/watchdog.yml"
+      - "scripts/watchdog.py"
+
+permissions:
+  actions: write
+  issues: write
+  contents: read
+
+concurrency:
+  group: watchdog
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Check and repair the scheduled updates
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SIMULATE_STALE: ${{ inputs.simulate_stale }}
+        run: python scripts/watchdog.py

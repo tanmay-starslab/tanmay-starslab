@@ -6,11 +6,15 @@ name: Refresh profile
 
 on:
   schedule:
-    # Just after midnight in Arizona (NASA posts the new picture before
-    # then), plus a midday run in case the morning one hit a flaky API.
-    - cron: "17 7 * * *"
-    - cron: "17 19 * * *"
+    # Hourly on purpose. GitHub's cron is best-effort: runs are delayed by
+    # hours or dropped when runners are busy, so a once-a-day schedule can
+    # silently skip a day. Every run is idempotent and commits only when
+    # something changed, so frequent runs cost nothing. The watchdog
+    # workflow re-dispatches this one if it still falls behind.
+    - cron: "23 * * * *"
   workflow_dispatch:
+  repository_dispatch:
+    types: [refresh-profile]
   push:
     branches: [main, master]
     paths:
