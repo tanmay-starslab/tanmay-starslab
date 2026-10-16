@@ -43,9 +43,9 @@ class Me(PhDStudent):
 
 <!-- APOD:START -->
 <p align="center">
-  <a href="https://science.nasa.gov/apod/"><img src="https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/october/Manhattan%20Milkyway.jpg?w=1152&amp;h=2048&amp;fit=clip&amp;crop=faces%2Cfocalpoint" width="48%" alt="The Milky Way over Manhattan"></a>
+  <a href="https://science.nasa.gov/image-article/apod-2026-october-16-chasing-the-international-space-station/"><img src="assets/generated/apod-still.jpg" width="48%" alt="Video of a rocket launch in dark,  predawn skies as seen from the beach.."></a>
   <img src="assets/merger.webp" width="48%" alt="Two disk galaxies collide, throw out tidal tails and merge: a simulation written for this page.">
-  <br><sub>real: <b>The Milky Way over Manhattan</b> (NASA APOD) &nbsp;·&nbsp; simulated: two galaxies merging</sub>
+  <br><sub>real: <b>Chasing the International Space Station</b> (NASA APOD video, click to play) &nbsp;·&nbsp; simulated: two galaxies merging</sub>
 </p>
 <!-- APOD:END -->
 

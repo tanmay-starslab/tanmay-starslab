@@ -1,5 +1,9 @@
 {
+ "alt": "Video of a rocket launch in dark,  predawn skies as seen from the beach..",
  "date": "2026-10-16",
- "image": "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/october/Manhattan%20Milkyway.jpg?w=1152&h=2048&fit=clip&crop=faces%2Cfocalpoint",
- "title": "The Milky Way over Manhattan"
+ "image": "assets/generated/apod-still.jpg",
+ "kind": "video",
+ "link": "https://science.nasa.gov/image-article/apod-2026-october-16-chasing-the-international-space-station/",
+ "title": "Chasing the International Space Station",
+ "video": "https://assets.science.nasa.gov/content/dam/science/cds/apod/apod/2026/october/CRS35-Holland30s1080p.mp4"
 }

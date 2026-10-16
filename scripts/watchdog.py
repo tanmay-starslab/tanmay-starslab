@@ -2,12 +2,14 @@
 
 GitHub's cron is best-effort: scheduled runs are delayed by hours or dropped
 outright when runners are busy, and schedules are switched off in quiet
-public repositories. This script, run every couple of hours, is the safety
-net. It:
+public repositories. This script, run hourly, is the safety net. It:
 
 1. re-enables any watched workflow that GitHub has disabled;
 2. re-dispatches a workflow whose last successful run is too old;
-3. checks the content itself (today's NASA picture, today's activity data);
+3. checks the content itself against its source: the newest entry NASA has
+   published versus the one on the profile, and today's activity data. A run
+   can succeed while showing stale content (a source fails and the cache is
+   reused), so job status alone is not evidence of freshness;
 4. opens one issue when something stays stale (GitHub then notifies the
    owner), keeps it current, and closes it once everything is fresh again.
 
@@ -23,8 +25,9 @@ import sys
 import urllib.request
 from pathlib import Path
 
+import apod
+
 ROOT = Path(__file__).resolve().parent.parent
-MST = dt.timezone(dt.timedelta(hours=-7), "MST")  # Arizona: no daylight saving
 ISSUE_TITLE = "Profile auto-refresh needs attention"
 
 # workflow file: (re-dispatch when the last success is older than, alert when older than), in hours
@@ -63,8 +66,9 @@ def hours_since(stamp: str, now: dt.datetime) -> float:
     return (now - dt.datetime.fromisoformat(stamp.replace("Z", "+00:00"))).total_seconds() / 3600
 
 
-def check_workflows(gh: GitHub, branch: str, now: dt.datetime, simulate: bool) -> list[str]:
-    problems = []
+def check_workflows(gh: GitHub, branch: str, now: dt.datetime, simulate: bool) -> tuple[list[str], set[str]]:
+    """Problems found, and the workflows that are dispatched or already running."""
+    problems, active = [], set()
     for wf, (redispatch_h, alert_h) in WATCHED.items():
         info = gh.call("GET", f"/actions/workflows/{wf}")
         if info.get("state") != "active":
@@ -79,29 +83,54 @@ def check_workflows(gh: GitHub, branch: str, now: dt.datetime, simulate: bool) -
             for s in ("queued", "in_progress")
         )
         print(f"{wf}: last success {age:.1f} h ago{' (a run is already queued or running)' if busy else ''}")
-        if age > redispatch_h and not busy:
+        if busy:
+            active.add(wf)
+        elif age > redispatch_h:
             print(f"{wf}: older than {redispatch_h} h; dispatching a run")
             gh.call("POST", f"/actions/workflows/{wf}/dispatches", {"ref": branch})
+            active.add(wf)
         if age > alert_h:
             problems.append(f"`{wf}` has not succeeded for {age:.0f} hours (expected at least every {redispatch_h} h).")
-    return problems
+    return problems, active
 
 
-def check_content(today: dt.date, simulate: bool) -> list[str]:
+def check_content(now: dt.datetime, simulate: bool) -> tuple[list[str], bool]:
+    """Problems found, and whether the profile is behind its source and needs a refresh."""
     problems = []
-    apod = json.loads((ROOT / "data" / "cache" / "apod.json").read_text(encoding="utf-8"))
-    apod_age = (today - dt.date.fromisoformat(apod["date"])).days
+    shown = json.loads((ROOT / "data" / "cache" / "apod.json").read_text(encoding="utf-8"))
+    shown_date = dt.date.fromisoformat(shown["date"])
     github = json.loads((ROOT / "data" / "cache" / "github.json").read_text(encoding="utf-8"))
-    data_age = (today - dt.date.fromisoformat(github["days"][-1][0])).days
+    data_date = dt.date.fromisoformat(github["days"][-1][0])
+    try:
+        newest = apod.newest_entry()
+        published = dt.date.fromisoformat(newest["date"])
+    except Exception as exc:  # noqa: BLE001
+        print(f"::warning title=APOD feed unreachable::{exc!r}")
+        newest, published = None, None
     if simulate:
-        apod_age, data_age = max(apod_age, 3), max(data_age, 3)
-    print(f"content: NASA picture from {apod['date']} ({apod_age} d old); activity data through {github['days'][-1][0]}")
-    # NASA posts the new picture late in the evening, Arizona time, so one day of lag is normal.
-    if apod_age >= 2:
-        problems.append(f"NASA's picture of the day is {apod_age} days old: both the APOD API and the APOD page may be failing.")
-    if data_age >= 2:
-        problems.append(f"The activity data stops {data_age} days ago: the GitHub API query may be failing.")
-    return problems
+        shown_date = shown_date - dt.timedelta(days=3)
+        data_date = data_date - dt.timedelta(days=3)
+    print(f"content: profile shows the APOD for {shown_date} ({shown.get('title')!r}); "
+          f"NASA's newest is {published or 'unknown'}; activity data through {data_date}")
+
+    # Behind if NASA has a newer date, or the same date under a different
+    # title (the right date on the wrong picture is how staleness hid once).
+    # An entry with no showable media is skipped on purpose by refresh.
+    behind = bool(newest and newest["kind"] != "other" and (
+        published > shown_date or (published == shown_date and newest["title"] != shown.get("title"))))
+    if behind:
+        # NASA posts each entry at 04:05 UTC on its date.
+        lag = (now - dt.datetime.combine(published, dt.time(4, 5), dt.timezone.utc)).total_seconds() / 3600
+        print(f"content: the profile is {lag:.1f} h behind NASA")
+        if lag > 6:
+            problems.append(f"NASA published \"{newest['title']}\" ({published}) {lag:.0f} hours ago, but the "
+                            f"profile still shows \"{shown.get('title')}\" ({shown_date}).")
+    today_et = now.astimezone(apod.EASTERN).date()
+    if published is None and (today_et - shown_date).days >= 2:
+        problems.append(f"The APOD on the profile is from {shown_date} and NASA's feed could not be read.")
+    if (now.date() - data_date).days >= 2:
+        problems.append(f"The activity data stops at {data_date}: the GitHub API query may be failing.")
+    return problems, behind
 
 
 def sync_issue(gh: GitHub, problems: list[str], simulate: bool) -> None:
@@ -134,7 +163,12 @@ def main() -> int:
     gh = GitHub(os.environ["GITHUB_REPOSITORY"], os.environ["GITHUB_TOKEN"], dry_run)
     now = dt.datetime.now(dt.timezone.utc)
     branch = gh.call("GET", "").get("default_branch", "main")
-    problems = check_workflows(gh, branch, now, simulate) + check_content(now.astimezone(MST).date(), simulate)
+    problems, active = check_workflows(gh, branch, now, simulate)
+    content_problems, behind = check_content(now, simulate)
+    problems += content_problems
+    if behind and "refresh.yml" not in active:
+        print("refresh.yml: the profile is behind its source; dispatching a run")
+        gh.call("POST", "/actions/workflows/refresh.yml/dispatches", {"ref": branch})
     sync_issue(gh, problems, simulate)
     print("healthy" if not problems else f"{len(problems)} problem(s) reported")
     return 0

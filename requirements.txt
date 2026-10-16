@@ -1,2 +1,4 @@
 fonttools==4.66.1
 brotli==1.2.0
+pillow==12.3.0
+imageio-ffmpeg==0.6.0

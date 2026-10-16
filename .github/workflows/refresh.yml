@@ -19,6 +19,7 @@ on:
     branches: [main, master]
     paths:
       - "scripts/**"
+      - "tests/**"
       - "requirements.txt"
       - ".github/workflows/refresh.yml"
 
@@ -43,6 +44,11 @@ jobs:
           cache: pip
 
       - run: pip install -r requirements.txt
+
+      - name: Regression tests
+        # Offline tests of the feed parser and figures; a failure here means
+        # the code is broken, so stop before publishing anything.
+        run: python -m unittest discover -s tests
 
       - name: Rebuild static figures
         run: python scripts/build_static.py

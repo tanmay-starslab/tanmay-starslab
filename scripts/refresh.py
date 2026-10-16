@@ -14,10 +14,10 @@ import html
 import json
 import math
 import os
-import re
 import sys
 import urllib.request
 
+import apod
 import readme
 from svgkit import ROOT, C, Fonts, document, esc, write
 
@@ -46,7 +46,8 @@ def cached(name: str, fetch):
         path.write_text(json.dumps(value, indent=1, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8")
         return value
     except Exception as exc:  # noqa: BLE001 - any failure means "use the cache"
-        print(f"warning: {name}: {exc!r}; using cached data", file=sys.stderr)
+        # An Actions annotation, so a fallback shows up on the run page instead of passing silently.
+        print(f"::warning title={name} fetch failed::{exc!r}; using cached data", file=sys.stderr)
         if path.exists():
             return json.loads(path.read_text(encoding="utf-8"))
         return None
@@ -90,38 +91,12 @@ def fetch_github() -> dict:
     }
 
 
-def plausible_apod(entry: dict) -> dict:
-    """The APOD API has been seen returning the site's logo and name instead of the picture."""
-    image, title = entry.get("image") or "", (entry.get("title") or "").strip()
-    if not image.startswith("https://") or "logo" in image.lower():
-        raise RuntimeError(f"implausible APOD image {image!r}")
-    if not title or "nasa science" in title.lower():
-        raise RuntimeError(f"implausible APOD title {title!r}")
-    return entry
+APOD_STILL = GENERATED / "apod-still.jpg"
 
 
 def fetch_apod() -> dict:
-    key = os.environ.get("NASA_API_KEY") or "DEMO_KEY"
-    try:
-        a = json.loads(http(f"https://api.nasa.gov/planetary/apod?thumbs=true&api_key={key}", timeout=40))
-        image = a.get("url") if a.get("media_type") == "image" else a.get("thumbnail_url")
-        return plausible_apod({"date": a["date"], "title": a["title"].strip(), "image": image or ""})
-    except Exception as exc:  # noqa: BLE001
-        print(f"warning: APOD API failed ({exc!r}); reading the APOD page instead", file=sys.stderr)
-    # The API is often down; the APOD page carries the same picture.
-    page = http("https://science.nasa.gov/apod/", timeout=40).decode("utf-8", "ignore")
-    page = re.sub(r"<(script|style)\b.*?</\1>", "", page, flags=re.S)
-    img = re.search(r'<img[^>]+src="(https://assets\.science\.nasa\.gov/[^"]*cds/apod/[^"]+)"', page)
-    title = re.search(r'<h2 class="display-48[^"]*">([^<]+)</h2>', page)
-    if not img or not title:
-        raise RuntimeError("the APOD page layout changed; no image or title found")
-    text = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", page)))
-    date = re.search(r"Date:\s*([A-Z][a-z]+ \d{1,2}, \d{4})", text)
-    return plausible_apod({
-        "date": dt.datetime.strptime(date.group(1), "%B %d, %Y").date().isoformat() if date else dt.date.today().isoformat(),
-        "title": html.unescape(title.group(1)).strip(),
-        "image": html.unescape(img.group(1)),
-    })
+    """Today's entry from NASA's APOD feed (see apod.py); video days get a still frame."""
+    return apod.fetch(APOD_STILL, "assets/generated/apod-still.jpg")
 
 
 # --------------------------------------------------------------------------- the activity figure
@@ -222,15 +197,17 @@ MERGER = (
 )
 
 
-def apod_block(apod: dict | None) -> str:
+def apod_block(entry: dict | None) -> str:
     """Today's real sky (NASA's picture of the day) beside a simulated one."""
-    if not apod:
+    if not entry:
         return f'<p align="center">\n  {MERGER}\n</p>'
+    link = entry.get("link") or "https://science.nasa.gov/apod/"
+    what = "NASA APOD video, click to play" if entry.get("kind") in ("video", "youtube") else "NASA APOD"
     return (
         '<p align="center">\n'
-        f'  <a href="https://science.nasa.gov/apod/"><img src="{esc(apod["image"])}" width="48%" alt="{esc(apod["title"])}"></a>\n'
+        f'  <a href="{esc(link)}"><img src="{esc(entry["image"])}" width="48%" alt="{esc(entry.get("alt") or entry["title"])}"></a>\n'
         f"  {MERGER}\n"
-        f'  <br><sub>real: <b>{html.escape(apod["title"], quote=False)}</b> (NASA APOD)'
+        f'  <br><sub>real: <b>{html.escape(entry["title"], quote=False)}</b> ({what})'
         " &nbsp;·&nbsp; simulated: two galaxies merging</sub>\n"
         "</p>"
     )
@@ -319,12 +296,12 @@ def sky_badges(day: dt.date) -> dict[str, str]:
 
 def main() -> int:
     gh = cached("github", fetch_github)
-    apod = cached("apod", fetch_apod)
+    sky = cached("apod", fetch_apod)
     if gh:
         write(GENERATED / "stats.svg", stats_figure(gh))
     for name, svg in sky_badges(dt.datetime.now(MST).date()).items():
         write(GENERATED / name, svg)
-    changed = readme.update({"APOD": apod_block(apod)})
+    changed = readme.update({"APOD": apod_block(sky)})
     print("README updated" if changed else "README unchanged")
     return 0
 

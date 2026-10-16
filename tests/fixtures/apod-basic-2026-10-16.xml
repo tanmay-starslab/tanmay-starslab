@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:apod="https://science.nasa.gov/apod/">
+<channel>
+	<title>APOD Basic</title>
+	<description>APOD Basic markup feed.</description>
+	<link>https://science.nasa.gov/</link>
+	<atom:link href="https://science.nasa.gov/feed/apod-basic/" rel="self" type="application/rss+xml" />
+	<language>en-us</language>
+	<item>
+		<title>Chasing the International Space Station</title>
+		<link>https://science.nasa.gov/image-article/apod-2026-october-16-chasing-the-international-space-station/</link>
+		<guid isPermaLink="true">https://science.nasa.gov/image-article/apod-2026-october-16-chasing-the-international-space-station/</guid>
+		<pubDate>Fri, 16 Oct 2026 04:05:00 +0000</pubDate>
+		<apod:url>https://science.nasa.gov/image-article/apod-2026-october-16-chasing-the-international-space-station/</apod:url>
+		<apod:discussion>https://asterisk.apod.com/discuss_apod.php?date=261016</apod:discussion>
+		<apod:credit><![CDATA[<a href="https://www.youtube.com/user/eric72holland">Eric Holland</a>]]></apod:credit>
+		<apod:copyright><![CDATA[<a href="https://www.youtube.com/user/eric72holland">Eric Holland</a>]]></apod:copyright>
+		<apod:alt>Video of a rocket launch in dark,  predawn skies as seen from the beach..</apod:alt>
+		<apod:primary_image_alt>Video of a rocket launch in dark,  predawn skies as seen from the beach..</apod:primary_image_alt>
+		<apod:explanation><![CDATA[trimmed]]></apod:explanation>
+		<description><![CDATA[trimmed]]></description>
+		<content:encoded><![CDATA[<source src="https://assets.science.nasa.gov/content/dam/science/cds/apod/apod/2026/october/CRS35-Holland30s1080p.mp4" type="video/mp4">]]></content:encoded>
+	</item>
+<item>
+		<title>The Milky Way over Manhattan</title>
+		<link>https://science.nasa.gov/image-article/apod-2026-october-15-the-milky-way-over-manhattan/</link>
+		<guid isPermaLink="true">https://science.nasa.gov/image-article/apod-2026-october-15-the-milky-way-over-manhattan/</guid>
+		<pubDate>Thu, 15 Oct 2026 04:05:00 +0000</pubDate>
+		<apod:url>https://science.nasa.gov/image-article/apod-2026-october-15-the-milky-way-over-manhattan/</apod:url>
+		<apod:hdurl>https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/october/Manhattan%20Milkyway.jpg?w=2160&#038;h=3840&#038;fit=clip&#038;crop=faces%2Cfocalpoint</apod:hdurl>
+		<apod:discussion>https://asterisk.apod.com/discuss_apod.php?date=261015</apod:discussion>
+		<apod:credit><![CDATA[<a href="https://www.instagram.com/frozen.spectrum/">Jason Kurth</a>, <a href="https://www.instagram.com/tmbucksley/?hl=en">Ty Buckley</a>]]></apod:credit>
+		<apod:copyright><![CDATA[<a href="https://www.instagram.com/frozen.spectrum/">Jason Kurth</a>, <a href="https://www.instagram.com/tmbucksley/?hl=en">Ty Buckley</a>]]></apod:copyright>
+		<apod:alt>A black and white view of the Manhattan skyline merges into a night sky with stars and a visible, though faint, Milky Way. Please see explanation for more details.</apod:alt>
+		<apod:primary_image_alt>A black and white view of the Manhattan skyline merges into a night sky with stars and a visible, though faint, Milky Way. Please see explanation for more details.</apod:primary_image_alt>
+		<apod:explanation><![CDATA[trimmed]]></apod:explanation>
+		<description><![CDATA[trimmed]]></description>
+		<content:encoded><![CDATA[]]></content:encoded>
+	</item>
+</channel>
+</rss>

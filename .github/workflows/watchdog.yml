@@ -7,7 +7,9 @@ name: Watchdog
 
 on:
   schedule:
-    - cron: "53 */2 * * *"
+    # Hourly, independent of the refresh schedule, so the two timers cover
+    # for each other when GitHub delays or drops scheduled runs.
+    - cron: "53 * * * *"
   workflow_dispatch:
     inputs:
       simulate_stale:
@@ -21,6 +23,7 @@ on:
     paths:
       - ".github/workflows/watchdog.yml"
       - "scripts/watchdog.py"
+      - "scripts/apod.py"
 
 permissions:
   actions: write
