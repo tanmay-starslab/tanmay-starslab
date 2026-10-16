@@ -92,22 +92,35 @@ def plausible(entry: dict) -> dict:
 
 
 def video_still(url: str, out: Path) -> None:
-    """Grab a frame a few seconds into the video and mark it with a play button."""
+    """Grab a frame a few seconds into the video and mark it with a play button.
+
+    The video is downloaded first and ffmpeg reads the local file: on GitHub's
+    runners ffmpeg reading the URL directly failed without saying why.
+    """
+    import shutil
+    from urllib.request import Request, urlopen
+
     import imageio_ffmpeg
     from PIL import Image, ImageDraw
 
     exe = imageio_ffmpeg.get_ffmpeg_exe()
     with tempfile.TemporaryDirectory() as tmp:
-        frame = Path(tmp) / "frame.png"
+        clip, frame = Path(tmp) / "clip.mp4", Path(tmp) / "frame.png"
+        with urlopen(Request(url, headers={"User-Agent": "tanmay-starslab-profile-readme"}), timeout=180) as resp, \
+                open(clip, "wb") as fh:
+            shutil.copyfileobj(resp, fh)
+        errors = []
         for offset in ("8", "2", "0"):
             proc = subprocess.run(
-                [exe, "-y", "-loglevel", "error", "-ss", offset, "-i", url, "-frames:v", "1", "-vf", "scale=1280:-2", str(frame)],
+                [exe, "-y", "-loglevel", "warning", "-ss", offset, "-i", str(clip), "-frames:v", "1",
+                 "-vf", "scale=1280:-2", str(frame)],
                 capture_output=True, text=True, timeout=180,
             )
             if proc.returncode == 0 and frame.exists():
                 break
+            errors.append(f"at {offset}s: exit {proc.returncode}: {proc.stderr.strip()[-300:]}")
         else:
-            raise StaleOrBroken(f"could not read a frame from {url}: {proc.stderr[:200]}")
+            raise StaleOrBroken(f"could not read a frame from {url} ({clip.stat().st_size} bytes): {' | '.join(errors)}")
         img = Image.open(frame).convert("RGB")
         draw = ImageDraw.Draw(img, "RGBA")
         w, h = img.size
