@@ -1,9 +1,8 @@
 {
- "alt": "Video of a rocket launch in dark,  predawn skies as seen from the beach..",
- "date": "2026-10-16",
- "image": "assets/generated/apod-still.jpg",
- "kind": "video",
- "link": "https://science.nasa.gov/image-article/apod-2026-october-16-chasing-the-international-space-station/",
- "title": "Chasing the International Space Station",
- "video": "https://assets.science.nasa.gov/content/dam/science/cds/apod/apod/2026/october/CRS35-Holland30s1080p.mp4"
+ "alt": "Red/blue stereo anaglyph of comet 67P.",
+ "date": "2026-10-17",
+ "image": "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/october/anaglyph-NAC_2015-07-25T06.28.48.742Z_lamy.jpg?w=1280&h=1280&fit=clip",
+ "kind": "image",
+ "link": "https://science.nasa.gov/image-article/apod-2026-october-17-3d-67p/",
+ "title": "3D 67P"
 }

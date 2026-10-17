@@ -43,9 +43,9 @@ class Me(PhDStudent):
 
 <!-- APOD:START -->
 <p align="center">
-  <a href="https://science.nasa.gov/image-article/apod-2026-october-16-chasing-the-international-space-station/"><img src="assets/generated/apod-still.jpg" width="48%" alt="Video of a rocket launch in dark,  predawn skies as seen from the beach.."></a>
+  <a href="https://science.nasa.gov/image-article/apod-2026-october-17-3d-67p/"><img src="https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/october/anaglyph-NAC_2015-07-25T06.28.48.742Z_lamy.jpg?w=1280&amp;h=1280&amp;fit=clip" width="48%" alt="Red/blue stereo anaglyph of comet 67P."></a>
   <img src="assets/merger.webp" width="48%" alt="Two disk galaxies collide, throw out tidal tails and merge: a simulation written for this page.">
-  <br><sub>real: <b>Chasing the International Space Station</b> (NASA APOD video, click to play) &nbsp;·&nbsp; simulated: two galaxies merging</sub>
+  <br><sub>real: <b>3D 67P</b> (NASA APOD) &nbsp;·&nbsp; simulated: two galaxies merging</sub>
 </p>
 <!-- APOD:END -->
 
