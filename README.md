@@ -43,9 +43,9 @@ class Me(PhDStudent):
 
 <!-- APOD:START -->
 <p align="center">
-  <a href="https://science.nasa.gov/image-article/apod-2026-october-17-3d-67p/"><img src="https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/october/anaglyph-NAC_2015-07-25T06.28.48.742Z_lamy.jpg?w=1280&amp;h=1280&amp;fit=clip" width="48%" alt="Red/blue stereo anaglyph of comet 67P."></a>
+  <a href="https://science.nasa.gov/image-article/apod-2026-october-18-sonified-eagle-nebula-pillars/"><img src="https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/october/SonifiedEagleNebulaPillars.jpg?w=1280&amp;h=1280&amp;fit=clip" width="48%" alt="Hubble image of Eagle Nebula Pillars with superimposed graph."></a>
   <img src="assets/merger.webp" width="48%" alt="Two disk galaxies collide, throw out tidal tails and merge: a simulation written for this page.">
-  <br><sub>real: <b>3D 67P</b> (NASA APOD) &nbsp;·&nbsp; simulated: two galaxies merging</sub>
+  <br><sub>real: <b>Sonified: Eagle Nebula Pillars</b> (NASA APOD) &nbsp;·&nbsp; simulated: two galaxies merging</sub>
 </p>
 <!-- APOD:END -->
 
