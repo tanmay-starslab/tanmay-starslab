@@ -43,9 +43,9 @@ class Me(PhDStudent):
 
 <!-- APOD:START -->
 <p align="center">
-  <a href="https://science.nasa.gov/image-article/apod-2026-october-18-sonified-eagle-nebula-pillars/"><img src="https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/october/SonifiedEagleNebulaPillars.jpg?w=1280&amp;h=1280&amp;fit=clip" width="48%" alt="Hubble image of Eagle Nebula Pillars with superimposed graph."></a>
+  <a href="https://science.nasa.gov/image-article/apod-2026-october-19-treble-clef-unusual-x-ray-hot-radio-source/"><img src="https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/october/trebleclef.jpg?w=1280&amp;h=1280&amp;fit=clip" width="48%" alt="See Explanation.  Clicking on the picture will download the highest resolution version available."></a>
   <img src="assets/merger.webp" width="48%" alt="Two disk galaxies collide, throw out tidal tails and merge: a simulation written for this page.">
-  <br><sub>real: <b>Sonified: Eagle Nebula Pillars</b> (NASA APOD) &nbsp;·&nbsp; simulated: two galaxies merging</sub>
+  <br><sub>real: <b>Treble Clef: Unusual X-ray Hot Radio Source</b> (NASA APOD) &nbsp;·&nbsp; simulated: two galaxies merging</sub>
 </p>
 <!-- APOD:END -->
 
