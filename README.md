@@ -45,7 +45,7 @@ class Me(PhDStudent):
 <p align="center">
   <a href="https://science.nasa.gov/image-article/apod-2026-october-20-an-anticrepuscular-rainbow-fan/"><img src="https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/october/AntiRainbow_Esposti_5120.jpg?w=1280&amp;h=1280&amp;fit=clip" width="48%" alt="Hills are seen in the distance below a partly cloudy sky. A group of orange rays appears to eminate from one area behind the hills. Across this fan of rays, near the top of the image, a short rainbow can be seen.  Please see the explanation for more detailed information."></a>
   <img src="assets/merger.webp" width="48%" alt="Two disk galaxies collide, throw out tidal tails and merge: a simulation written for this page.">
-  <br><sub>real: <b>A Year of Sunspots</b> (NASA APOD) &nbsp;·&nbsp; simulated: two galaxies merging</sub>
+  <br><sub>real: <b>An Anticrepuscular Rainbow Fan</b> (NASA APOD) &nbsp;·&nbsp; simulated: two galaxies merging</sub>
 </p>
 <!-- APOD:END -->
 
