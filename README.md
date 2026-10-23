@@ -43,9 +43,9 @@ class Me(PhDStudent):
 
 <!-- APOD:START -->
 <p align="center">
-  <a href="https://science.nasa.gov/image-article/apod-2026-october-22-the-first-green-star-wd-j13306435/"><img src="https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/october/green_wd_mark-garlick_annotated2.jpg?w=1280&amp;h=1280&amp;fit=clip" width="48%" alt="A star shines with a greenish hue in front of a dark field with more distant stars, surrounded by a greenish disk with debris."></a>
+  <a href="https://science.nasa.gov/image-article/apod-2026-october-23-andromeda-in-southern-spring/"><img src="https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/october/APOD_Lucy.jpg?w=1280&amp;h=1280&amp;fit=clip" width="48%" alt="The Andromeda galaxy above rolling hills."></a>
   <img src="assets/merger.webp" width="48%" alt="Two disk galaxies collide, throw out tidal tails and merge: a simulation written for this page.">
-  <br><sub>real: <b>The First Green Star, WD J1330+6435</b> (NASA APOD) &nbsp;·&nbsp; simulated: two galaxies merging</sub>
+  <br><sub>real: <b>Andromeda in Southern Spring</b> (NASA APOD) &nbsp;·&nbsp; simulated: two galaxies merging</sub>
 </p>
 <!-- APOD:END -->
 
