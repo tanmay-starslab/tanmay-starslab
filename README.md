@@ -43,9 +43,9 @@ class Me(PhDStudent):
 
 <!-- APOD:START -->
 <p align="center">
-  <a href="https://science.nasa.gov/image-article/apod-2026-october-23-andromeda-in-southern-spring/"><img src="https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/october/APOD_Lucy.jpg?w=1280&amp;h=1280&amp;fit=clip" width="48%" alt="The Andromeda galaxy above rolling hills."></a>
+  <a href="https://science.nasa.gov/image-article/apod-2026-october-24-rosettas-selfie/"><img src="https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/october/ESA_Rosetta_Philae_CIVA_141007.png?w=1280&amp;h=1280&amp;fit=clip" width="48%" alt="Image of a Rosetta spacecraft solar array in foreground and the nucleus of comet 67P in background."></a>
   <img src="assets/merger.webp" width="48%" alt="Two disk galaxies collide, throw out tidal tails and merge: a simulation written for this page.">
-  <br><sub>real: <b>Andromeda in Southern Spring</b> (NASA APOD) &nbsp;·&nbsp; simulated: two galaxies merging</sub>
+  <br><sub>real: <b>Rosetta's Selfie</b> (NASA APOD) &nbsp;·&nbsp; simulated: two galaxies merging</sub>
 </p>
 <!-- APOD:END -->
 
