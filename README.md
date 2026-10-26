@@ -43,9 +43,9 @@ class Me(PhDStudent):
 
 <!-- APOD:START -->
 <p align="center">
-  <a href="https://science.nasa.gov/image-article/apod-2026-october-25-dark-matter-in-a-simulated-universe/"><img src="https://assets.science.nasa.gov/content/dam/science/cds/apod/apod/2021/october/DarkMatter_KipacAmnh_1200.jpg?w=1280&amp;h=1280&amp;fit=clip" width="48%" alt="The picture shows a computer simulation of the matter distribution in our universe with dark matter shown in a dark color on a light background. Please see the explanation for more detailed information."></a>
+  <a href="https://science.nasa.gov/image-article/2026-october-26-m42-the-great-nebula-in-orion/"><img src="https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/october/OrionSword_Palaia_2000.jpg?w=1280&amp;h=1280&amp;fit=clip" width="48%" alt="A starfield features a large and colorful nebula in its center, filled with dark dust and glowing gas in red and blue."></a>
   <img src="assets/merger.webp" width="48%" alt="Two disk galaxies collide, throw out tidal tails and merge: a simulation written for this page.">
-  <br><sub>real: <b>Dark Matter in a Simulated Universe</b> (NASA APOD) &nbsp;·&nbsp; simulated: two galaxies merging</sub>
+  <br><sub>real: <b>M42: The Great Nebula in Orion</b> (NASA APOD) &nbsp;·&nbsp; simulated: two galaxies merging</sub>
 </p>
 <!-- APOD:END -->
 
