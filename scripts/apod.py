@@ -64,6 +64,8 @@ def parse_feed(raw: bytes) -> list[dict]:
             "title": title,
             "link": (item.findtext("link") or "").strip(),
             "alt": html.unescape((item.findtext("apod:alt", "", NS) or title).strip()),
+            # Most APOD pictures belong to their photographers; the profile names them.
+            "credit": " ".join(html.unescape(re.sub(r"<[^>]+>", "", item.findtext("apod:credit", "", NS))).split()),
         }
         if hd:
             # A sensible display size instead of the full-resolution original.

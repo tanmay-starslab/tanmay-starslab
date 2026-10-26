@@ -1,5 +1,6 @@
-"""Refresh the live parts of the profile: the activity figure, NASA's picture
-and the sky badges (tonight's moon, sunset in Tempe).
+"""Refresh the live data of the profile: the activity figure, NASA's picture
+(fetched into data/cache/apod.json; daily.py puts it in the README) and the
+sky badges (tonight's moon, sunset in Tempe).
 
 Each source is fetched independently. A source that fails keeps its last
 good data from data/cache/, so one flaky API never blanks a section.
@@ -10,7 +11,6 @@ good data from data/cache/, so one flaky API never blanks a section.
 from __future__ import annotations
 
 import datetime as dt
-import html
 import json
 import math
 import os
@@ -18,7 +18,6 @@ import sys
 import urllib.request
 
 import apod
-import readme
 from svgkit import ROOT, C, Fonts, document, esc, write
 
 USER = "tanmay-starslab"
@@ -188,31 +187,6 @@ def stats_figure(gh: dict) -> str:
     return document(W, H, body, fonts, "".join(css), title=f"GitHub activity: {title}")
 
 
-# --------------------------------------------------------------------------- README blocks
-
-
-MERGER = (
-    '<img src="assets/merger.webp" width="48%" alt="Two disk galaxies collide, throw out tidal tails '
-    'and merge: a simulation written for this page.">'
-)
-
-
-def apod_block(entry: dict | None) -> str:
-    """Today's real sky (NASA's picture of the day) beside a simulated one."""
-    if not entry:
-        return f'<p align="center">\n  {MERGER}\n</p>'
-    link = entry.get("link") or "https://science.nasa.gov/apod/"
-    what = "NASA APOD video, click to play" if entry.get("kind") in ("video", "youtube") else "NASA APOD"
-    return (
-        '<p align="center">\n'
-        f'  <a href="{esc(link)}"><img src="{esc(entry["image"])}" width="48%" alt="{esc(entry.get("alt") or entry["title"])}"></a>\n'
-        f"  {MERGER}\n"
-        f'  <br><sub>real: <b>{html.escape(entry["title"], quote=False)}</b> ({what})'
-        " &nbsp;·&nbsp; simulated: two galaxies merging</sub>\n"
-        "</p>"
-    )
-
-
 # --------------------------------------------------------------------------- sky badges
 
 TEMPE = (33.4255, -111.9400)
@@ -301,8 +275,8 @@ def main() -> int:
         write(GENERATED / "stats.svg", stats_figure(gh))
     for name, svg in sky_badges(dt.datetime.now(MST).date()).items():
         write(GENERATED / name, svg)
-    changed = readme.update({"APOD": apod_block(sky)})
-    print("README updated" if changed else "README unchanged")
+    # The README's sky block is written by daily.py, which also draws the day's art.
+    print(f"APOD: {sky and sky.get('date')} {sky and sky.get('title')!r}")
     return 0
 
 

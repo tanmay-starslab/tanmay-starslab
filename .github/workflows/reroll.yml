@@ -1,0 +1,78 @@
+name: Reroll the universe
+
+# The "roll a new universe" button on the profile opens a pre-filled issue.
+# This counts the roll (data/reroll.json changes today's seed), asks the
+# refresh workflow to draw and publish the new art, then answers and closes
+# the issue. Only the exact pre-filled title triggers it; the title is
+# compared in the `if:` below and never reaches a shell.
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+  actions: write
+
+concurrency:
+  group: reroll
+  cancel-in-progress: false
+
+jobs:
+  reroll:
+    if: github.event.issue.title == 'reroll the universe'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Count the roll
+        id: roll
+        env:
+          BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          if ! python scripts/daily.py bump-roll; then
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/reroll.json
+          git commit -q -m "Roll a new universe"
+          for attempt in 1 2 3 4 5; do
+            if git pull -q --rebase origin "$BRANCH" && git push -q origin "HEAD:$BRANCH"; then
+              echo "ok=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            sleep $((attempt * 5))
+          done
+          exit 1
+
+      - name: Draw it
+        if: steps.roll.outputs.ok == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ github.event.repository.default_branch }}
+        run: gh workflow run refresh.yml --repo "$GITHUB_REPOSITORY" --ref "$BRANCH"
+
+      - name: Answer and close the issue
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NUMBER: ${{ github.event.issue.number }}
+          OK: ${{ steps.roll.outputs.ok }}
+        run: |
+          if [ "$OK" = "true" ]; then
+            body="🎲 Rolled! A new sky, galaxy and merger are being drawn now and will be on the profile in about two minutes."
+          else
+            body="The universe has been re-rolled a lot today, so it is resting until midnight (Arizona time). Try again tomorrow!"
+          fi
+          gh issue comment "$NUMBER" --repo "$GITHUB_REPOSITORY" --body "$body"
+          gh issue close "$NUMBER" --repo "$GITHUB_REPOSITORY" --reason completed

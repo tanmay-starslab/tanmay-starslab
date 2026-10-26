@@ -10,6 +10,8 @@ public repositories. This script, run hourly, is the safety net. It:
    published versus the one on the profile, and today's activity data. A run
    can succeed while showing stale content (a source fails and the cache is
    reused), so job status alone is not evidence of freshness;
+   the same goes for the daily art: the art branch must hold today's
+   universe, and the README on main must point at it;
 4. opens one issue when something stays stale (GitHub then notifies the
    owner), keeps it current, and closes it once everything is fresh again.
 
@@ -29,6 +31,8 @@ import apod
 
 ROOT = Path(__file__).resolve().parent.parent
 ISSUE_TITLE = "Profile auto-refresh needs attention"
+ART_BRANCH = "daily-art"  # as in daily.py (not imported: this script runs without the drawing dependencies)
+ARIZONA = dt.timezone(dt.timedelta(hours=-7))
 
 # workflow file: (re-dispatch when the last success is older than, alert when older than), in hours
 WATCHED = {
@@ -133,6 +137,34 @@ def check_content(now: dt.datetime, simulate: bool) -> tuple[list[str], bool]:
     return problems, behind
 
 
+def check_art(gh: GitHub, now: dt.datetime, simulate: bool) -> tuple[list[str], bool]:
+    """Problems found, and whether the daily art is behind (yesterday's, or not linked from the README)."""
+    import base64
+    import urllib.error
+
+    try:
+        blob = gh.call("GET", f"/contents/manifest.json?ref={ART_BRANCH}")
+        manifest = json.loads(base64.b64decode(blob["content"]))
+    except (urllib.error.HTTPError, KeyError, ValueError) as exc:
+        print(f"art: no readable manifest on {ART_BRANCH} ({exc!r})")
+        return [f"The `{ART_BRANCH}` branch has no readable manifest.json, so the hero, merger and footer "
+                "are missing from the profile."], True
+    day = dt.date.fromisoformat(manifest["day"])
+    local = now.astimezone(ARIZONA)
+    if simulate:
+        day -= dt.timedelta(days=3)
+    linked = f"hero-{manifest['version']}.svg" in (ROOT / "README.md").read_text(encoding="utf-8")
+    print(f"art: {ART_BRANCH} holds {manifest['version']} (day {day}); README links it: {linked}")
+    # A new day starts at midnight in Arizona; give the hourly refresh an hour to draw it.
+    behind = not linked or (day < local.date() and local.hour >= 1)
+    problems = []
+    if (local.date() - day).days >= 2:
+        problems.append(f"The daily art is from {day}: the hero, merger and footer have not been redrawn since.")
+    if not linked:
+        problems.append(f"README.md does not link the published art ({manifest['version']}).")
+    return problems, behind
+
+
 def sync_issue(gh: GitHub, problems: list[str], simulate: bool) -> None:
     open_issues = gh.call("GET", "/issues?state=open&per_page=100")
     existing = next((i for i in open_issues if i.get("title") == ISSUE_TITLE and "pull_request" not in i), None)
@@ -165,7 +197,9 @@ def main() -> int:
     branch = gh.call("GET", "").get("default_branch", "main")
     problems, active = check_workflows(gh, branch, now, simulate)
     content_problems, behind = check_content(now, simulate)
-    problems += content_problems
+    art_problems, art_behind = check_art(gh, now, simulate)
+    problems += content_problems + art_problems
+    behind = behind or art_behind
     if behind and "refresh.yml" not in active:
         print("refresh.yml: the profile is behind its source; dispatching a run")
         gh.call("POST", "/actions/workflows/refresh.yml/dispatches", {"ref": branch})

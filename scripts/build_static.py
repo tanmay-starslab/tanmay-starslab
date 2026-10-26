@@ -2,10 +2,11 @@
 
     python scripts/build_static.py
 
-Everything here is wordless or nearly so: the hero, the typing line, the
-link chips, the tool orbits and the aurora footer. (The pixel-art GIFs come
-from make_pixel_gifs.py, the galaxy merger from make_merger.py.) Animations are CSS keyframes, which GitHub plays inside
-<img>; each file also honours prefers-reduced-motion.
+Everything here is wordless or nearly so: the typing line, the link chips
+and the tool orbits. (The pixel-art GIFs come from make_pixel_gifs.py; the
+hero, the galaxy merger and the footer change daily and come from daily.py.)
+Animations are CSS keyframes, which GitHub plays inside <img>; each file also
+honours prefers-reduced-motion.
 """
 
 from __future__ import annotations
@@ -52,154 +53,6 @@ def icon_inner(name: str, size: float) -> str:
     k = size / max(vw, vh)
     return (f'<g transform="translate({-size / 2:.2f} {-size / 2:.2f}) scale({k:.4f}) '
             f'translate({-vx:g} {-vy:g})">{inner}</g>')
-
-
-# --------------------------------------------------------------------------- hero
-
-HERO_W, HERO_H = 1200, 420
-QSO = (1095.0, 62.0)
-PRISM = (275.0, 298.0)
-GAL = (560.0, 150.0)
-HALO_R = 120.0
-SX0, SX1 = 60.0, 1140.0
-SY_TOP, SY_BASE = 322.0, 396.0
-LMIN, LMAX = 1000.0, 2900.0
-EMISSION = [(1025.7, 0.3, 9), (1215.7, 1.25, 16), (1240.0, 0.35, 9), (1400.0, 0.2, 16),
-            (1549.0, 0.62, 20), (1909.0, 0.3, 26), (2798.0, 0.42, 34)]
-ABSORPTION = [(1031.9, 1.6, 1.1), (1037.6, 1.0, 1.1), (1393.8, 1.1, 1.1), (1402.8, 0.7, 1.1),
-              (1548.2, 1.8, 0.9), (1550.8, 1.2, 0.9), (2796.4, 2.2, 1.6), (2803.5, 1.7, 1.6)]
-
-
-def wl_x(lam: float) -> float:
-    f = (math.log(lam) - math.log(LMIN)) / (math.log(LMAX) - math.log(LMIN))
-    return SX0 + f * (SX1 - SX0)
-
-
-def quasar_spectrum() -> tuple[str, str]:
-    """Observed spectrum and unabsorbed continuum, as SVG path data."""
-    rng = random.Random(1216)
-    n = 1400
-    lams = [LMIN * (LMAX / LMIN) ** (i / (n - 1)) for i in range(n)]
-    forest = [(rng.uniform(1005, 1212), rng.uniform(0.2, 1.5), rng.uniform(1.0, 2.0)) for _ in range(48)]
-    flux, model = [], []
-    for lam in lams:
-        f = (lam / 1450.0) ** -0.55
-        for c, a, s in EMISSION:
-            f += a * math.exp(-0.5 * ((lam - c) / s) ** 2)
-        model.append(f)
-        tau = sum(t * math.exp(-0.5 * ((lam - c) / s) ** 2) for c, t, s in forest)
-        tau += sum(t * math.exp(-0.5 * ((lam - c) / s) ** 2) for c, t, s in ABSORPTION)
-        flux.append(max(f * math.exp(-tau) + rng.gauss(0, 0.018), 0.0))
-    top = max(model)
-    to_d = lambda fs, step=1: "M" + " L".join(  # noqa: E731
-        f"{wl_x(lam):.1f},{SY_BASE - v / top * (SY_BASE - SY_TOP):.1f}" for lam, v in list(zip(lams, fs))[::step]
-    )
-    return to_d(flux), to_d(model, 7)
-
-
-def spiral_galaxy(rng: random.Random) -> str:
-    dots = []
-    for i in range(720):
-        arm = i % 2
-        t = rng.random() ** 0.8
-        theta = t * 3.3 * math.pi + arm * math.pi
-        r = 10 + 98 * t + rng.gauss(0, 3 + 7 * t)
-        ang = theta + rng.gauss(0, 0.16)
-        x, y = r * math.cos(ang), r * math.sin(ang)
-        color = C.glow if r < 26 else rng.choice([C.violet_hi, C.ink, "#9FB6FF", C.violet_hi])
-        dots.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{rng.choice([0.7, 0.9, 1.1, 1.4]) * 1.3:.2f}" '
-                    f'fill="{color}" opacity="{rng.uniform(0.35, 0.95):.2f}"/>')
-    for _ in range(160):  # bulge
-        x, y = rng.gauss(0, 9), rng.gauss(0, 9)
-        dots.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="1.3" fill="{C.glow}" opacity="{rng.uniform(0.4, 0.9):.2f}"/>')
-    gx, gy = GAL
-    return (
-        f'<circle cx="{gx}" cy="{gy}" r="{HALO_R}" fill="url(#halo)"/>'
-        f'<circle cx="{gx}" cy="{gy}" r="{HALO_R}" fill="none" stroke="{C.muted}" stroke-opacity=".45" '
-        f'stroke-dasharray="2 6"/>'
-        f'<g transform="translate({gx} {gy}) rotate(-18) scale(1 0.42)">'
-        f'<ellipse rx="118" ry="118" fill="url(#disk)"/>'
-        f'<g class="spin">{"".join(dots)}</g>'
-        f'<circle r="16" fill="url(#core)"/></g>'
-    )
-
-
-def hero() -> str:
-    rng = random.Random(42)
-    stars, star_css = starfield(rng, HERO_W, 310, 230, 6)
-    (qx, qy), (px, py), (gx, gy) = QSO, PRISM, GAL
-    dx, dy = px - qx, py - qy
-    length = math.hypot(dx, dy)
-    ux, uy = dx / length, dy / length
-    t = (gx - qx) * ux + (gy - qy) * uy
-    b = math.hypot(gx - (qx + t * ux), gy - (qy + t * uy))
-    half = math.sqrt(max(HALO_R**2 - b**2, 0))
-    f_in, f_out = (t - half) / length, (t + half) / length
-    spec, model = quasar_spectrum()
-
-    defs = f"""<defs>
-<radialGradient id="sky" cx="50%" cy="35%" r="75%"><stop offset="0" stop-color="{C.sky_top}"/><stop offset="1" stop-color="{C.sky}"/></radialGradient>
-<radialGradient id="nebV"><stop offset="0" stop-color="{C.violet}" stop-opacity=".14"/><stop offset="1" stop-color="{C.violet}" stop-opacity="0"/></radialGradient>
-<radialGradient id="nebT"><stop offset="0" stop-color="{C.gold}" stop-opacity=".08"/><stop offset="1" stop-color="{C.gold}" stop-opacity="0"/></radialGradient>
-<radialGradient id="nebR"><stop offset="0" stop-color="{C.rose}" stop-opacity=".09"/><stop offset="1" stop-color="{C.rose}" stop-opacity="0"/></radialGradient>
-<radialGradient id="halo"><stop offset="0" stop-color="{C.violet}" stop-opacity=".13"/><stop offset=".7" stop-color="{C.violet}" stop-opacity=".05"/><stop offset="1" stop-color="{C.violet}" stop-opacity="0"/></radialGradient>
-<radialGradient id="disk"><stop offset="0" stop-color="{C.violet_hi}" stop-opacity=".35"/><stop offset="1" stop-color="{C.violet_hi}" stop-opacity="0"/></radialGradient>
-<radialGradient id="core"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".35" stop-color="{C.glow}" stop-opacity=".9"/><stop offset="1" stop-color="{C.glow}" stop-opacity="0"/></radialGradient>
-<radialGradient id="qso"><stop offset="0" stop-color="{C.glow}" stop-opacity=".95"/><stop offset="1" stop-color="{C.glow}" stop-opacity="0"/></radialGradient>
-<linearGradient id="tail" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="104" y2="-36"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient>
-<linearGradient id="specfade" x1="0" x2="1"><stop offset="0" stop-color="{C.violet}"/><stop offset=".55" stop-color="{C.violet_hi}"/><stop offset="1" stop-color="{C.gold}"/></linearGradient>
-</defs>"""
-
-    nebulae = (
-        '<g class="neb" style="animation-duration:34s"><circle cx="300" cy="120" r="260" fill="url(#nebV)"/></g>'
-        '<g class="neb" style="animation-duration:46s;animation-delay:-12s"><circle cx="880" cy="230" r="300" fill="url(#nebT)"/></g>'
-        '<g class="neb" style="animation-duration:40s;animation-delay:-20s"><circle cx="1040" cy="40" r="220" fill="url(#nebR)"/></g>'
-    )
-    shooting = []
-    for x0, y0, dur, delay in ((1020, 40, 9, 1.5), (760, 20, 13, 6), (420, 60, 17, 10)):
-        shooting.append(
-            f'<g transform="translate({x0} {y0})"><g class="ss" style="animation-duration:{dur}s;animation-delay:{delay}s">'
-            f'<line x1="0" y1="0" x2="104" y2="-36" stroke="url(#tail)" stroke-width="1.6" stroke-linecap="round"/>'
-            f'<circle r="1.7" fill="#FFFFFF"/></g></g>'
-        )
-    sight = (
-        f'<line x1="{qx}" y1="{qy}" x2="{px}" y2="{py}" stroke="{C.glow}" stroke-opacity=".45" stroke-width="1.2"/>'
-        f'<circle cx="{qx}" cy="{qy}" r="30" fill="url(#qso)" class="pulse"/>'
-        f'<path d="M{qx - 18},{qy} H{qx + 18} M{qx},{qy - 18} V{qy + 18}" stroke="{C.glow}" stroke-width=".9" stroke-opacity=".8"/>'
-        f'<circle cx="{qx}" cy="{qy}" r="3.4" fill="#FFFFFF"/>'
-        + "".join(f'<circle class="ph" cx="{qx}" cy="{qy}" r="2.8" fill="{C.glow}" style="animation-delay:{i * 1.25:.2f}s"/>' for i in range(3))
-        + f'<path d="M{px},{py - 10} L{px + 10},{py + 8} L{px - 10},{py + 8} Z" fill="{C.sky}" stroke="{C.ink}" stroke-width="1.3" stroke-linejoin="round"/>'
-    )
-    spectrum = (
-        f'<line x1="{SX0}" y1="{SY_BASE + 6}" x2="{SX1}" y2="{SY_BASE + 6}" stroke="{C.faint}"/>'
-        f'<path d="{model}" fill="none" stroke="{C.muted}" stroke-opacity=".5" stroke-dasharray="4 5"/>'
-        f'<path class="spec" d="{spec}" pathLength="1000" fill="none" stroke="url(#specfade)" stroke-width="1.6" stroke-linejoin="round"/>'
-    )
-    css = (
-        star_css
-        + "@keyframes neb{from{transform:translate(0,0)}to{transform:translate(46px,-16px)}}"
-        ".neb{animation:neb 40s ease-in-out infinite alternate}"
-        "@keyframes spin{to{transform:rotate(-360deg)}}.spin{animation:spin 110s linear infinite}"
-        "@keyframes ss{0%{transform:translate(0,0);opacity:0}1.5%{opacity:1}9%{transform:translate(-300px,104px);opacity:0}"
-        "100%{transform:translate(-300px,104px);opacity:0}}.ss{opacity:0;animation:ss 11s ease-in infinite}"
-        "@keyframes pulse{0%,100%{opacity:.95}50%{opacity:.55}}.pulse{animation:pulse 2.6s ease-in-out infinite}"
-        "@keyframes ph{0%{transform:translate(0,0);opacity:0}5%{opacity:1}"
-        f"{f_in * 100:.1f}%{{opacity:1}}{f_out * 100:.1f}%{{opacity:.3}}96%{{opacity:.3}}"
-        f"100%{{transform:translate({dx:.1f}px,{dy:.1f}px);opacity:0}}}}"
-        ".ph{opacity:0;animation:ph 3.8s linear infinite}"
-        "@keyframes spec{0%{stroke-dashoffset:1000;opacity:1}42%{stroke-dashoffset:0;opacity:1}"
-        "84%{stroke-dashoffset:0;opacity:1}94%{stroke-dashoffset:0;opacity:0}100%{stroke-dashoffset:1000;opacity:0}}"
-        ".spec{stroke-dasharray:1000;stroke-dashoffset:0;animation:spec 14s linear infinite}"
-    )
-    body = (
-        defs
-        + f'<rect width="{HERO_W}" height="{HERO_H}" rx="22" fill="url(#sky)"/>'
-        + f'<clipPath id="clip"><rect width="{HERO_W}" height="{HERO_H}" rx="22"/></clipPath>'
-        + f'<g clip-path="url(#clip)">{nebulae}</g>'
-        + stars + "".join(shooting) + spiral_galaxy(rng) + sight + spectrum
-    )
-    return document(HERO_W, HERO_H, body, None, css,
-                    title="Animated space scene: light from a quasar crosses a spinning galaxy's halo and becomes a spectrum")
 
 
 # --------------------------------------------------------------------------- typing line
@@ -264,6 +117,10 @@ def chip_icon(kind: str) -> str:
     if kind == "website":
         return (f'<g fill="none" stroke="{s}" stroke-width="1.6"><circle r="9"/><ellipse rx="4" ry="9"/>'
                 f'<path d="M-9,0 H9 M-7.5,-5 H7.5 M-7.5,5 H7.5"/></g>')
+    if kind == "reroll":
+        pips = "".join(f'<circle cx="{x}" cy="{y}" r="1.6"/>' for x, y in ((-4.5, -4.5), (0, 0), (4.5, 4.5), (4.5, -4.5), (-4.5, 4.5)))
+        return (f'<g class="roll"><rect x="-10" y="-10" width="20" height="20" rx="4.5" fill="none" stroke="{C.gold}" '
+                f'stroke-width="1.6"/><g fill="{C.gold}">{pips}</g></g>')
     if kind == "email":
         return (f'<g fill="none" stroke="{s}" stroke-width="1.6" stroke-linejoin="round">'
                 f'<rect x="-10" y="-7" width="20" height="14" rx="2"/><path d="M-10,-6 L0,2 L10,-6"/></g>')
@@ -272,6 +129,10 @@ def chip_icon(kind: str) -> str:
 
 
 CHIPS = [("website", "website"), ("scholar", "scholar"), ("linkedin", "linkedin"), ("email", "email")]
+
+
+REROLL_CSS = ("@keyframes roll{0%,78%{transform:rotate(0)}88%{transform:rotate(200deg)}100%{transform:rotate(180deg)}}"
+              ".roll{animation:roll 6s cubic-bezier(.3,.7,.3,1) infinite}")
 
 
 def chip(kind: str, label: str) -> str:
@@ -284,7 +145,7 @@ def chip(kind: str, label: str) -> str:
         f'<g transform="translate(30 22)">{chip_icon(kind)}</g>'
         + fonts.text(52, 29, label, "rm", size, C.ink)
     )
-    return document(round(w), h, body, fonts, title=label)
+    return document(round(w), h, body, fonts, REROLL_CSS if kind == "reroll" else "", title=label)
 
 
 # --------------------------------------------------------------------------- tool orbits
@@ -377,61 +238,12 @@ def tools() -> str:
                           "h5py, Linux, Manim, VS Code, Slurm, OpenCV")
 
 
-# --------------------------------------------------------------------------- footer
-
-
-def footer() -> str:
-    W, H = 1200, 170
-    rng = random.Random(11)
-    stars, star_css = starfield(rng, W, 110, 100, 5)
-    ribbons = []
-    for i, (color, amp, y0, dur) in enumerate(((C.teal, 16, 44, 26), (C.violet, 20, 64, 34), (C.rose, 12, 36, 42))):
-        pts = []
-        for x in range(0, 2 * W + 1, 20):
-            y = y0 + amp * math.sin(2 * math.pi * x / 600 + i) + 8 * math.sin(2 * math.pi * x / 240 + 2 * i)
-            pts.append(f"{x},{y:.1f}")
-        d = "M" + " L".join(pts) + f" L{2 * W},{y0 + 90} L0,{y0 + 90} Z"
-        ribbons.append(f'<g class="rib" style="animation-duration:{dur}s"><path d="{d}" fill="url(#a{i})" filter="url(#blur)"/></g>')
-    # Treeline and an observatory dome.
-    trees = []
-    x = 0.0
-    while x < W:
-        h = rng.uniform(14, 34)
-        trees.append(f"M{x:.0f},{H} L{x + 9:.0f},{H - h:.0f} L{x + 18:.0f},{H}")
-        x += rng.uniform(10, 18)
-    dome_x = 930
-    body = (
-        "<defs>"
-        f'<linearGradient id="fsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{C.sky}"/>'
-        f'<stop offset="1" stop-color="{C.sky_top}"/></linearGradient>'
-        + "".join(f'<linearGradient id="a{i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{c}" stop-opacity=".55"/>'
-                  f'<stop offset="1" stop-color="{c}" stop-opacity="0"/></linearGradient>'
-                  for i, c in enumerate((C.teal, C.violet, C.rose)))
-        + '<filter id="blur" x="-5%" y="-50%" width="110%" height="200%"><feGaussianBlur stdDeviation="7"/></filter>'
-        "</defs>"
-        f'<rect width="{W}" height="{H}" rx="22" fill="url(#fsky)"/>'
-        + stars + "".join(ribbons)
-        + f'<path d="M0,{H - 18} Q300,{H - 46} 600,{H - 22} T1200,{H - 30} V{H} H0 Z" fill="#09090B"/>'
-        + f'<path d="{" ".join(trees)}" fill="#050506"/>'
-        + f'<g transform="translate({dome_x} {H - 40})"><rect x="-30" y="0" width="60" height="30" fill="#050506"/>'
-        f'<path d="M-34,2 A34,34 0 0 1 34,2 Z" fill="#0D0D10"/><rect class="slit" x="-5" y="-30" width="10" height="30" fill="{C.glow}" opacity=".5"/></g>'
-    )
-    css = (star_css
-           + "@keyframes rib{to{transform:translateX(-600px)}}.rib{animation:rib 30s linear infinite}"
-           "@keyframes slit{0%,100%{opacity:.25}50%{opacity:.7}}.slit{animation:slit 4s ease-in-out infinite}")
-    clip = f'<clipPath id="clip"><rect width="{W}" height="{H}" rx="22"/></clipPath>'
-    return document(W, H, f'{clip}<g clip-path="url(#clip)">{body}</g>', None, css,
-                    title="Aurora over an observatory")
-
-
 def main() -> None:
     outputs = {
-        ASSETS / "hero.svg": hero(),
         ASSETS / "typing.svg": typing(),
         ASSETS / "tools.svg": tools(),
-        ASSETS / "footer.svg": footer(),
     }
-    for kind, label in CHIPS:
+    for kind, label in [*CHIPS, ("reroll", "roll a new universe")]:
         outputs[ASSETS / "chips" / f"{kind}.svg"] = chip(kind, label)
     for path, content in outputs.items():
         if write(path, content):

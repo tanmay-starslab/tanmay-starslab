@@ -11,15 +11,21 @@ from __future__ import annotations
 
 import datetime as dt
 import sys
+import tempfile
 import unittest
 import xml.etree.ElementTree as ET
 from pathlib import Path
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import apod  # noqa: E402
+import daily  # noqa: E402
+import hero  # noqa: E402
+import merger  # noqa: E402
 import refresh  # noqa: E402
+import watchdog  # noqa: E402
 
 FIXTURE = (ROOT / "tests" / "fixtures" / "apod-basic-2026-10-16.xml").read_bytes()
 
@@ -61,16 +67,124 @@ class ApodFeed(unittest.TestCase):
         self.assertNotIn("datetime.now()", source)
 
 
-class ApodBlock(unittest.TestCase):
-    def test_video_entries_link_to_the_video(self) -> None:
-        block = refresh.apod_block({
-            "date": "2026-10-16", "title": "Chasing the International Space Station", "kind": "video",
-            "image": "assets/generated/apod-still.jpg", "alt": "A launch",
-            "link": "https://science.nasa.gov/image-article/apod-2026-october-16-chasing-the-international-space-station/",
-        })
-        self.assertIn("apod-2026-october-16", block)
-        self.assertIn("click to play", block)
-        self.assertIn("assets/generated/apod-still.jpg", block)
+class ApodCredit(unittest.TestCase):
+    def test_credit_is_plain_text(self) -> None:
+        entries = apod.parse_feed(FIXTURE)
+        self.assertEqual(entries[0]["credit"], "Eric Holland")
+        self.assertEqual(entries[1]["credit"], "Jason Kurth, Ty Buckley")
+
+
+ENTRY = {
+    "date": "2026-10-16", "title": "Chasing the International Space Station", "kind": "video",
+    "image": "assets/generated/apod-still.jpg", "alt": "A launch", "credit": "Eric Holland",
+    "link": "https://science.nasa.gov/image-article/apod-2026-october-16-chasing-the-international-space-station/",
+}
+
+
+class DailySeeds(unittest.TestCase):
+    def test_a_day_has_one_universe_and_days_differ(self) -> None:
+        day = dt.date(2026, 10, 26)
+        self.assertEqual(daily.seed_for(daily.universe_key(day, 0)), daily.seed_for("2026-10-26"))
+        self.assertNotEqual(daily.seed_for("2026-10-26"), daily.seed_for("2026-10-27"))
+        self.assertNotEqual(daily.seed_for(daily.universe_key(day, 0)), daily.seed_for(daily.universe_key(day, 1)))
+
+    def test_version_follows_nasa_and_the_universe(self) -> None:
+        a = daily.version_for("2026-10-26", ENTRY)
+        self.assertTrue(a.startswith("2026-10-26-"))
+        self.assertNotEqual(a, daily.version_for("2026-10-26", {**ENTRY, "title": "Something else"}))
+        self.assertNotEqual(a, daily.version_for("2026-10-26r1", ENTRY))
+
+    def test_rolls_reset_daily_and_are_capped(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(daily, "ROLL_FILE", Path(tmp) / "reroll.json"):
+            day = dt.date(2026, 10, 26)
+            self.assertEqual(daily.roll_count(day), 0)
+            self.assertEqual(daily.bump_roll(day), 1)
+            self.assertEqual(daily.bump_roll(day), 2)
+            self.assertEqual(daily.roll_count(day + dt.timedelta(days=1)), 0)
+            for _ in range(daily.MAX_ROLLS):
+                daily.bump_roll(day)
+            self.assertEqual(daily.bump_roll(day), 0)
+            self.assertEqual(daily.roll_count(day), daily.MAX_ROLLS)
+
+    def test_watchdog_watches_the_branch_daily_publishes(self) -> None:
+        self.assertEqual(watchdog.ART_BRANCH, daily.ART_BRANCH)
+
+
+class Hero(unittest.TestCase):
+    def test_same_seed_same_sky(self) -> None:
+        svg, facts = hero.build(1234)
+        again, _ = hero.build(1234)
+        self.assertEqual(svg, again)
+        ET.fromstring(svg)  # well-formed
+        self.assertLess(len(svg), 400_000)
+        self.assertGreaterEqual(len(facts["lines"]), 1)
+        self.assertLess(facts["z_abs"], facts["z_qso"])
+
+    def test_sightline_crosses_the_halo_and_misses_the_disk(self) -> None:
+        import math
+        import random
+        for seed in range(200):
+            g = hero.layout(random.Random(seed))
+            (qx, qy), (px, py), (gx, gy) = g["Q"], g["P"], g["G"]
+            # Perpendicular distance from the galaxy to the sightline.
+            b = abs((px - qx) * (qy - gy) - (qx - gx) * (py - qy)) / math.hypot(px - qx, py - qy)
+            self.assertAlmostEqual(b, g["b"], places=6)
+            self.assertLess(b, g["halo"])
+            self.assertGreater(b, g["disk"] * 0.75)
+            self.assertTrue(60 < px < 1140 and py == hero.PRISM_Y)
+
+
+class Merger(unittest.TestCase):
+    def test_the_galaxies_merge(self) -> None:
+        for seed in (1, 2):
+            p = merger.plan(seed)
+            snaps, *_ = merger.simulate(seed, p)
+            first = snaps[0][1]
+            last = snaps[-1][1]
+            self.assertGreater(float(((first[1] - first[0]) ** 2).sum() ** 0.5), 2.0)
+            self.assertLess(float(((last[1] - last[0]) ** 2).sum() ** 0.5), 0.35)
+
+
+class ReadmeBlocks(unittest.TestCase):
+    def setUp(self) -> None:
+        self.manifest = {
+            "version": "2026-10-26-abcdef",
+            "hero": {"z_qso": 2.4, "z_abs": 0.9, "arms": 2, "lines": ["Fe II", "Mg II"]},
+            "merger": {"q": 0.7, "retrograde": False, "merged": True},
+            "plaque_title": "x &amp; y", "footer_title": "An aurora",
+        }
+
+    def test_blocks_point_at_todays_versioned_art(self) -> None:
+        blocks = daily.readme_blocks(self.manifest, ENTRY)
+        self.assertIn(f"{daily.RAW}/hero-2026-10-26-abcdef.svg", blocks["HERO"])
+        self.assertIn(f"{daily.RAW}/merger-2026-10-26-abcdef.webp", blocks["APOD"])
+        self.assertIn(f"{daily.RAW}/footer-2026-10-26-abcdef.svg", blocks["FOOTER"])
+        self.assertIn("apod-2026-october-16", blocks["APOD"])
+        self.assertIn("assets/generated/apod-still.jpg", blocks["APOD"])
+        self.assertIn("Fe II and Mg II", blocks["HERO"])
+
+    def test_the_reroll_link_opens_the_issue_the_workflow_listens_for(self) -> None:
+        workflow = (ROOT / ".github" / "workflows" / "reroll.yml").read_text(encoding="utf-8")
+        self.assertIn(f"github.event.issue.title == '{daily.REROLL_TITLE}'", workflow)
+        self.assertIn("title=" + daily.REROLL_TITLE.replace(" ", "+"), daily.REROLL_URL)
+
+    def test_the_readme_has_every_marker(self) -> None:
+        text = (ROOT / "README.md").read_text(encoding="utf-8")
+        for name in ("HERO", "APOD", "FOOTER"):
+            self.assertIn(f"<!-- {name}:START -->", text)
+            self.assertIn(f"<!-- {name}:END -->", text)
+
+
+class Plaque(unittest.TestCase):
+    def test_long_titles_are_trimmed_and_credit_shown(self) -> None:
+        svg = daily.plaque({**ENTRY, "title": "A very long title " * 8}, {"q": 0.5, "retrograde": True}, "v", 2)
+        ET.fromstring(svg)
+        self.assertIn("…", svg)
+        self.assertIn("© Eric Holland", svg)
+        self.assertIn("re-rolled 2×", svg)
+
+    def test_footer_is_well_formed(self) -> None:
+        ET.fromstring(daily.footer(5, dt.date(2026, 10, 26)))
 
 
 class SkyBadges(unittest.TestCase):

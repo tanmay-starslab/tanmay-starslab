@@ -1,8 +1,11 @@
 name: Refresh profile
 
-# Redraws the animated activity figure, the moon and sunset badges, and swaps
-# in NASA's picture of the day.
-# Runs every morning, on demand, and whenever the scripts change.
+# Redraws the animated activity figure, the moon and sunset badges, swaps in
+# NASA's picture of the day, and draws the day's art (a new hero sky, galaxy
+# merger and footer; see scripts/daily.py). The art is published to the
+# daily-art branch before the README that points at it is pushed to main.
+# Runs hourly, on demand, when someone rolls a new universe, and whenever
+# the scripts change.
 
 on:
   schedule:
@@ -63,6 +66,38 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NASA_API_KEY: ${{ secrets.NASA_API_KEY }}
         run: python scripts/refresh.py
+
+      - name: Draw the daily art
+        # Today's art is drawn once (the hourly runs after that find it
+        # published and only check the README's links). The previous version's
+        # files are kept on the branch, so a README that fails to push still
+        # points at images that exist.
+        run: |
+          published=""
+          if git fetch -q origin daily-art 2>/dev/null; then
+            published=$(git show FETCH_HEAD:manifest.json 2>/dev/null || true)
+          fi
+          python scripts/daily.py --published "$published" --out build/daily
+          if [ -f build/daily/manifest.json ] && [ -n "$published" ]; then
+            old=$(printf '%s' "$published" | python -c 'import json,sys; print(json.load(sys.stdin)["version"])')
+            mkdir -p build/prev
+            git archive FETCH_HEAD | tar -x -C build/prev
+            find build/prev -maxdepth 1 -name "*-$old.*" -exec cp {} build/daily/ \;
+          fi
+
+      - name: Publish the daily art
+        if: hashFiles('build/daily/manifest.json') != ''
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd build/daily
+          git init -q -b daily-art
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Daily art $(python -c 'import json; print(json.load(open("manifest.json"))["version"])')"
+          # One commit, force-pushed: the branch never accumulates history.
+          git push -q -f "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" daily-art
 
       - name: Commit and push
         env:
