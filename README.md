@@ -1,7 +1,7 @@
 <!-- Blocks between START/END markers are rewritten by scripts/daily.py (the daily art and NASA's picture). -->
 
 <!-- HERO:START -->
-<img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/hero-2026-10-27-604833.svg" width="100%" alt="Today&#x27;s generated sky: a quasar at redshift 2.83 shines through the halo of a 4-armed spiral galaxy at redshift 1.05, and its light is drawn as a spectrum showing the galaxy&#x27;s Ca II, Fe II, Mg I and Mg II absorption lines.">
+<img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/hero-2026-10-27-a468e3.svg" width="100%" alt="Today&#x27;s generated sky: a quasar at redshift 2.83 shines through the halo of a 4-armed spiral galaxy at redshift 1.05, and its light is drawn as a spectrum showing the galaxy&#x27;s Ca II, Fe II, Mg I and Mg II absorption lines.">
 <!-- HERO:END -->
 
 <p align="center"><img src="assets/typing.svg" width="100%" alt="tracing quasar light through galaxies; turning simulations into spectra; debugging at 3 a.m.; git push origin main"></p>
@@ -45,15 +45,15 @@ class Me(PhDStudent):
 
 <!-- APOD:START -->
 <p align="center">
-  <a href="https://science.nasa.gov/image-article/apod-2026-october-27-noctilucent-clouds-over-sweden/"><img src="https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/october/NocClouds_Hofer_6048.jpg?w=1280&amp;h=1280&amp;fit=clip" width="48%" alt="A dark night sky is pictured over a green field bounded by trees in silhouette. Across the image middle are blue filamentary glows -- noctilucent clouds. Dark clouds are seen across the top of the image.  Please see the explanation for more detailed information."></a>
-  <a href="https://github.com/tanmay-starslab/tanmay-starslab/issues/new?title=reroll+the+universe&amp;body=Press+%2A%2ASubmit+new+issue%2A%2A+and+a+bot+draws+a+new+sky%2C+galaxy+and+merger+for+the+profile+%28it+closes+this+issue+for+you%2C+usually+within+two+minutes%29."><img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/merger-2026-10-27-604833.webp" width="48%" alt="Today&#x27;s simulated galaxy merger: two disk galaxies with mass ratio 1 to 0.93 collide, throw out tidal tails and merge. Click to roll a new universe."></a>
-  <img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/plaque-2026-10-27-604833.svg" width="97%" alt="27 October 2026 · NASA&#x27;s picture of the day — Noctilucent Clouds over Sweden — © V. Höfer, D. Večerník &amp; B. Večerníková | simulated today — two galaxies merge, mass ratio 1 : 0.93 — both disks spin with the orbit · click it to roll a new one">
+  <a href="https://science.nasa.gov/image-article/apod-2026-october-28-the-mutual-occultation-of-ganymede-and-io/"><img src="https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/october/occultation.jpeg?w=1280&amp;h=1280&amp;fit=clip" width="48%" alt="The disk of Jupiter sits to the right. The giant red spot rotates into view and the horizontal cloud streams swirl. To the left, Ganymede passes in front of Io. An inlet shows this zoomed in. Ganymede casts a shadow on Jupiter&#x27;s disk."></a>
+  <a href="https://github.com/tanmay-starslab/tanmay-starslab/issues/new?title=reroll+the+universe&amp;body=Press+%2A%2ASubmit+new+issue%2A%2A+and+a+bot+draws+a+new+sky%2C+galaxy+and+merger+for+the+profile+%28it+closes+this+issue+for+you%2C+usually+within+two+minutes%29."><img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/merger-2026-10-27-a468e3.webp" width="48%" alt="Today&#x27;s simulated galaxy merger: two disk galaxies with mass ratio 1 to 0.93 collide, throw out tidal tails and merge. Click to roll a new universe."></a>
+  <img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/plaque-2026-10-27-a468e3.svg" width="97%" alt="28 October 2026 · NASA&#x27;s picture of the day — The Mutual Occultation of Ganymede and Io — © Michael Wong | simulated today — two galaxies merge, mass ratio 1 : 0.93 — both disks spin with the orbit · click it to roll a new one">
 </p>
 <p align="center"><a href="https://github.com/tanmay-starslab/tanmay-starslab/issues/new?title=reroll+the+universe&amp;body=Press+%2A%2ASubmit+new+issue%2A%2A+and+a+bot+draws+a+new+sky%2C+galaxy+and+merger+for+the+profile+%28it+closes+this+issue+for+you%2C+usually+within+two+minutes%29."><img src="assets/chips/reroll.svg" height="40" alt="Roll a new universe"></a></p>
 <!-- APOD:END -->
 
 <!-- FOOTER:START -->
-<img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/footer-2026-10-27-604833.svg" width="100%" alt="An aurora over an observatory under tonight&#x27;s waning gibbous">
+<img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/footer-2026-10-27-a468e3.svg" width="100%" alt="An aurora over an observatory under tonight&#x27;s waning gibbous">
 <!-- FOOTER:END -->
 
 <p align="center">
