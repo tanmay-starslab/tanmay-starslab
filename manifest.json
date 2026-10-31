@@ -1,0 +1,31 @@
+{
+ "apod": {
+  "date": "2026-10-31",
+  "title": "Night on a Spooky Planet"
+ },
+ "day": "2026-10-31",
+ "footer_title": "An aurora over an observatory under tonight's waning gibbous",
+ "hero": {
+  "arms": 2,
+  "barred": true,
+  "impact": 0.54,
+  "lines": [
+   "Ca II",
+   "Fe II",
+   "Mg I",
+   "Mg II"
+  ],
+  "pitch": 19,
+  "z_abs": 1.2,
+  "z_qso": 2.23
+ },
+ "merger": {
+  "merged": true,
+  "q": 0.91,
+  "retrograde": true
+ },
+ "plaque_title": "31 October 2026 \u00b7 NASA&#x27;s picture of the day \u2014 Night on a Spooky Planet \u2014 \u00a9 St\u00e9phane Vetter (Nuits sacr\u00e9es) | simulated today \u2014 two galaxies merge, mass ratio 1 : 0.91 \u2014 one disk spins against the orbit \u00b7 click it to roll a new one",
+ "roll": 0,
+ "seed": 105944551740180,
+ "version": "2026-10-31-6f14bd"
+}
