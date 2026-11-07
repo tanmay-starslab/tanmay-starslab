@@ -1,0 +1,30 @@
+{
+ "apod": {
+  "date": "2026-11-07",
+  "title": "De Gerlache-Kocher Massif"
+ },
+ "day": "2026-11-07",
+ "footer_title": "An aurora over an observatory under tonight's waning crescent",
+ "hero": {
+  "arms": 2,
+  "barred": true,
+  "impact": 0.68,
+  "lines": [
+   "Fe II",
+   "Mg I",
+   "Mg II"
+  ],
+  "pitch": 20,
+  "z_abs": 1.72,
+  "z_qso": 2.64
+ },
+ "merger": {
+  "merged": true,
+  "q": 0.58,
+  "retrograde": true
+ },
+ "plaque_title": "7 November 2026 \u00b7 NASA&#x27;s picture of the day \u2014 De Gerlache-Kocher Massif \u2014 \u00a9 Alejandro Sanz | simulated today \u2014 two galaxies merge, mass ratio 1 : 0.58 \u2014 one disk spins against the orbit \u00b7 click it to roll a new one",
+ "roll": 0,
+ "seed": 279573607661339,
+ "version": "2026-11-07-14d7c6"
+}
