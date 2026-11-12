@@ -282,7 +282,10 @@ def fetch_visits() -> int:
 
 
 def record_visits(day: dt.date, total: int | None) -> dict[str, int]:
-    """The running total at the first refresh of each day, kept forever in data/visits.json."""
+    """The running total at the first refresh of each day, kept forever in data/visits.json.
+
+    It starts with 2026-10-14: 0, the day the counter was added to the README.
+    """
     history = json.loads(VISITS.read_text(encoding="utf-8")) if VISITS.exists() else {}
     if total is not None and day.isoformat() not in history:
         history[day.isoformat()] = total
@@ -309,17 +312,20 @@ def per_day(history: dict[str, int], day: dt.date, window: int) -> float | None:
 def visits_expressions(history: dict[str, int], day: dt.date) -> list[tuple[str, str]]:
     """(badge text, what it means) for each way of putting the total beside the recent pace."""
     total = history[day.isoformat()]
-    r1, r7, r30 = (per_day(history, day, w) for w in (1, 7, 30))
+    spans = {w: visits_between(history, day, w) for w in (1, 7, 30)}
+    r1, r7, r30 = (got[0] / got[1] if got else None for got in spans.values())
     expressions = []
     if r7 is not None:
         # Calculus: the count and its derivative.
-        expressions.append((f"N = {total} · Ṅ = {r7:.1f}/day", f"{r7:.1f} a day over the last week"))
+        expressions.append((f"N = {total} · Ṅ = {r7:.1f}/day", f"{r7:.1f} a day over the last {spans[7][1]} days"))
+    if spans[1] and spans[1][1] == 1 and spans[7][1] == 7:
         # Unix uptime: load averages over three windows, here 1, 7 and 30 days.
         expressions.append((f"{total} · load {r1:.1f} {r7:.1f} {r30:.1f}",
-                            "visits a day averaged over 1, 7 and 30 days, like uptime's load average"))
+                            f"visits a day averaged over 1, 7 and {spans[30][1]} days, like uptime's load average"))
     if r30:
         # Doubling time: how long the current pace takes to match everything so far.
-        expressions.append((f"{total} · 2× in {total / r30:.0f} d", "days for the last month's pace to double the total"))
+        expressions.append((f"{total} · 2× in {total / r30:.0f} d",
+                            f"days for the pace of the last {spans[30][1]} days to double the total"))
     week, prev = visits_between(history, day, 7), visits_between(history, day - dt.timedelta(days=7), 7)
     if week and week[1] == 7:
         change = f" {'▲' if week[0] >= prev[0] else '▼'}{abs(week[0] - prev[0]) * 100 / prev[0]:.0f}%" \
