@@ -57,7 +57,8 @@ class Me(PhDStudent):
 <!-- FOOTER:END -->
 
 <p align="center">
-  <img src="https://visitor-badge.laobi.icu/badge?page_id=tanmay-starslab.tanmay-starslab&left_color=%2316161A&right_color=%23E6B566&left_text=visits" alt="Visits">
+  <img src="assets/generated/visits.svg" alt="Total visits beside a measure of recent traffic; the formula changes daily">
+  <img src="https://visitor-badge.laobi.icu/badge?page_id=tanmay-starslab.tanmay-starslab" width="1" height="1" alt="">
   <a href="https://github.com/tanmay-starslab?tab=followers"><img src="https://img.shields.io/github/followers/tanmay-starslab?style=flat-square&label=followers&labelColor=16161A&color=8B7BF5" alt="Followers"></a>
   <a href="https://github.com/tanmay-starslab?tab=repositories"><img src="https://img.shields.io/github/stars/tanmay-starslab?affiliations=OWNER&style=flat-square&label=stars&labelColor=16161A&color=8B7BF5" alt="Stars"></a>
   <img src="assets/generated/moon.svg" alt="Tonight's moon phase">

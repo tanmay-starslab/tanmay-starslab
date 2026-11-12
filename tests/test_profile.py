@@ -196,5 +196,47 @@ class SkyBadges(unittest.TestCase):
         self.assertTrue(19 <= sun.hour <= 20)
 
 
+VISITS_DAY = dt.date(2026, 11, 30)
+# 3 visits a day for a month, then 10 a day for the last week.
+VISITS = {(VISITS_DAY - dt.timedelta(days=k)).isoformat(): 1000 - 10 * min(k, 7) - 3 * max(k - 7, 0)
+          for k in range(31)}
+
+
+class VisitsBadge(unittest.TestCase):
+    DAY, HISTORY = VISITS_DAY, VISITS
+
+    def test_rates_over_each_window(self) -> None:
+        self.assertEqual(refresh.visits_between(self.HISTORY, self.DAY, 7), (70, 7))
+        self.assertAlmostEqual(refresh.per_day(self.HISTORY, self.DAY, 30), (70 + 69) / 30)
+
+    def test_short_history_uses_what_there_is(self) -> None:
+        history = {"2026-11-28": 200, "2026-11-30": 210}
+        self.assertEqual(refresh.visits_between(history, self.DAY, 7), (10, 2))
+        self.assertIsNone(refresh.visits_between({"2026-11-30": 210}, self.DAY, 7))
+
+    def test_the_four_expressions(self) -> None:
+        self.assertEqual([text for text, _ in refresh.visits_expressions(self.HISTORY, self.DAY)], [
+            "N = 1000 · Ṅ = 10.0/day",
+            "1000 · load 10.0 10.0 4.6",
+            "1000 · 2× in 216 d",
+            "1000 · +70 this wk ▲233%",
+        ])
+
+    def test_badge_rotates_through_them_daily(self) -> None:
+        seen = set()
+        for k in range(4):
+            day = self.DAY + dt.timedelta(days=k)
+            history = {**self.HISTORY, **{(self.DAY + dt.timedelta(days=j)).isoformat(): 1000 + 10 * j
+                                          for j in range(1, k + 1)}}
+            title = ET.fromstring(refresh.visits_badge(history, day)).find("{http://www.w3.org/2000/svg}title").text
+            self.assertTrue(title.startswith(f"{history[day.isoformat()]} visits; "))
+            seen.add(title.split("; ")[1].split(" · ")[1].split()[0])
+        self.assertEqual(len(seen), 4)
+
+    def test_first_day_shows_just_the_total(self) -> None:
+        svg = refresh.visits_badge({"2026-11-30": 213}, self.DAY)
+        self.assertIn(">213<", svg)
+
+
 if __name__ == "__main__":
     unittest.main()

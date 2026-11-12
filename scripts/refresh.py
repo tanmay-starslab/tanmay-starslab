@@ -1,6 +1,6 @@
 """Refresh the live data of the profile: the activity figure, NASA's picture
-(fetched into data/cache/apod.json; daily.py puts it in the README) and the
-sky badges (tonight's moon, sunset in Tempe).
+(fetched into data/cache/apod.json; daily.py puts it in the README), the
+sky badges (tonight's moon, sunset in Tempe) and the visits badge.
 
 Each source is fetched independently. A source that fails keeps its last
 good data from data/cache/, so one flaky API never blanks a section.
@@ -14,6 +14,7 @@ import datetime as dt
 import json
 import math
 import os
+import re
 import sys
 import urllib.request
 
@@ -268,6 +269,76 @@ def sky_badges(day: dt.date) -> dict[str, str]:
     }
 
 
+# --------------------------------------------------------------------------- visits badge
+
+# The README still loads the public counter as an invisible pixel, which is what
+# counts a visit; query_only reads the total without adding one.
+COUNTER = "https://visitor-badge.laobi.icu/badge?page_id=tanmay-starslab.tanmay-starslab&query_only=true"
+VISITS = ROOT / "data" / "visits.json"
+
+
+def fetch_visits() -> int:
+    return int(re.findall(r">([\d,]+)<", http(COUNTER).decode())[-1].replace(",", ""))
+
+
+def record_visits(day: dt.date, total: int | None) -> dict[str, int]:
+    """The running total at the first refresh of each day, kept forever in data/visits.json."""
+    history = json.loads(VISITS.read_text(encoding="utf-8")) if VISITS.exists() else {}
+    if total is not None and day.isoformat() not in history:
+        history[day.isoformat()] = total
+        VISITS.write_text(json.dumps(history, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+    return history
+
+
+def visits_between(history: dict[str, int], day: dt.date, window: int) -> tuple[int, int] | None:
+    """(visits, days) over the last `window` days, or over all the history there is if it is shorter."""
+    now = history.get(day.isoformat())
+    past = sorted(d for d in history if d < day.isoformat())
+    if now is None or not past:
+        return None
+    cutoff = (day - dt.timedelta(days=window)).isoformat()
+    then = max((d for d in past if d <= cutoff), default=past[0])
+    return now - history[then], (day - dt.date.fromisoformat(then)).days
+
+
+def per_day(history: dict[str, int], day: dt.date, window: int) -> float | None:
+    got = visits_between(history, day, window)
+    return got[0] / got[1] if got else None
+
+
+def visits_expressions(history: dict[str, int], day: dt.date) -> list[tuple[str, str]]:
+    """(badge text, what it means) for each way of putting the total beside the recent pace."""
+    total = history[day.isoformat()]
+    r1, r7, r30 = (per_day(history, day, w) for w in (1, 7, 30))
+    expressions = []
+    if r7 is not None:
+        # Calculus: the count and its derivative.
+        expressions.append((f"N = {total} · Ṅ = {r7:.1f}/day", f"{r7:.1f} a day over the last week"))
+        # Unix uptime: load averages over three windows, here 1, 7 and 30 days.
+        expressions.append((f"{total} · load {r1:.1f} {r7:.1f} {r30:.1f}",
+                            "visits a day averaged over 1, 7 and 30 days, like uptime's load average"))
+    if r30:
+        # Doubling time: how long the current pace takes to match everything so far.
+        expressions.append((f"{total} · 2× in {total / r30:.0f} d", "days for the last month's pace to double the total"))
+    week, prev = visits_between(history, day, 7), visits_between(history, day - dt.timedelta(days=7), 7)
+    if week and week[1] == 7:
+        change = f" {'▲' if week[0] >= prev[0] else '▼'}{abs(week[0] - prev[0]) * 100 / prev[0]:.0f}%" \
+            if prev and prev[1] == 7 and prev[0] else ""
+        # Week over week, as every analytics dashboard has it.
+        expressions.append((f"{total} · +{week[0]} this wk{change}", "visits this week against the week before"))
+    return expressions
+
+
+def visits_badge(history: dict[str, int], day: dt.date) -> str:
+    """Total visits beside one way of saying how busy it has been lately; the way changes daily."""
+    total = history[day.isoformat()]
+    expressions = visits_expressions(history, day)
+    if not expressions:
+        return badge("visits", str(total), "#E6B566", True, title=f"{total} visits")
+    value, meaning = expressions[day.toordinal() % len(expressions)]
+    return badge("visits", value, "#E6B566", True, title=f"{total} visits; {value}: {meaning}")
+
+
 def main() -> int:
     gh = cached("github", fetch_github)
     sky = cached("apod", fetch_apod)
@@ -275,6 +346,15 @@ def main() -> int:
         write(GENERATED / "stats.svg", stats_figure(gh))
     for name, svg in sky_badges(dt.datetime.now(MST).date()).items():
         write(GENERATED / name, svg)
+    today = dt.datetime.now(MST).date()
+    try:
+        total = fetch_visits()
+    except Exception as exc:  # noqa: BLE001 - keep yesterday's badge
+        print(f"::warning title=visits fetch failed::{exc!r}; keeping the last badge", file=sys.stderr)
+        total = None
+    history = record_visits(today, total)
+    if today.isoformat() in history:
+        write(GENERATED / "visits.svg", visits_badge(history, today))
     # The README's sky block is written by daily.py, which also draws the day's art.
     print(f"APOD: {sky and sky.get('date')} {sky and sky.get('title')!r}")
     return 0
