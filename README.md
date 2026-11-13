@@ -1,7 +1,7 @@
 <!-- Blocks between START/END markers are rewritten by scripts/daily.py (the daily art and NASA's picture). -->
 
 <!-- HERO:START -->
-<img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/hero-2026-11-12-b7e8ed.svg" width="100%" alt="Today&#x27;s generated sky: a quasar at redshift 2.28 shines through the halo of a 3-armed spiral galaxy at redshift 1.40, and its light is drawn as a spectrum showing the galaxy&#x27;s Fe II, Mg I and Mg II absorption lines.">
+<img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/hero-2026-11-13-9703dd.svg" width="100%" alt="Today&#x27;s generated sky: a quasar at redshift 2.35 shines through the halo of a 4-armed spiral galaxy at redshift 1.53, and its light is drawn as a spectrum showing the galaxy&#x27;s Fe II, Mg I and Mg II absorption lines.">
 <!-- HERO:END -->
 
 <p align="center"><img src="assets/typing.svg" width="100%" alt="tracing quasar light through galaxies; turning simulations into spectra; debugging at 3 a.m.; git push origin main"></p>
@@ -45,15 +45,15 @@ class Me(PhDStudent):
 
 <!-- APOD:START -->
 <p align="center">
-  <a href="https://science.nasa.gov/image-article/apod-2026-november-12-moon-venus-and-spica-meet/"><img src="https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/november/conjunction-bubak.jpg?w=1280&amp;h=1280&amp;fit=clip" width="48%" alt="A crescent moon and bright Venus appear beyond a mountain in a rural area at dusk."></a>
-  <a href="https://github.com/tanmay-starslab/tanmay-starslab/issues/new?title=reroll+the+universe&amp;body=Press+%2A%2ASubmit+new+issue%2A%2A+and+a+bot+draws+a+new+sky%2C+galaxy+and+merger+for+the+profile+%28it+closes+this+issue+for+you%2C+usually+within+two+minutes%29."><img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/merger-2026-11-12-b7e8ed.webp" width="48%" alt="Today&#x27;s simulated galaxy merger: two disk galaxies with mass ratio 1 to 0.62 collide, throw out tidal tails and merge. Click to roll a new universe."></a>
-  <img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/plaque-2026-11-12-b7e8ed.svg" width="97%" alt="12 November 2026 · NASA&#x27;s picture of the day — Moon, Venus and Spica Meet — © Włodzimierz Bubak | simulated today — two galaxies merge, mass ratio 1 : 0.62 — both disks spin with the orbit · click it to roll a new one">
+  <a href="https://science.nasa.gov/image-article/apod-2026-november-13-ngc-206-and-the-star-clouds-of-andromeda/"><img src="https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/november/Andromeda_closeupCruz4096.jpg?w=1280&amp;h=1280&amp;fit=clip" width="48%" alt="Close up of NGC 206 in the Andromeda galaxy."></a>
+  <a href="https://github.com/tanmay-starslab/tanmay-starslab/issues/new?title=reroll+the+universe&amp;body=Press+%2A%2ASubmit+new+issue%2A%2A+and+a+bot+draws+a+new+sky%2C+galaxy+and+merger+for+the+profile+%28it+closes+this+issue+for+you%2C+usually+within+two+minutes%29."><img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/merger-2026-11-13-9703dd.webp" width="48%" alt="Today&#x27;s simulated galaxy merger: two disk galaxies with mass ratio 1 to 1.00 collide, throw out tidal tails and merge. Click to roll a new universe."></a>
+  <img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/plaque-2026-11-13-9703dd.svg" width="97%" alt="13 November 2026 · NASA&#x27;s picture of the day — NGC 206 and the Star Clouds of Andromeda — © David Cruz | simulated today — two galaxies merge, mass ratio 1 : 1.00 — both disks spin with the orbit · click it to roll a new one">
 </p>
 <p align="center"><a href="https://github.com/tanmay-starslab/tanmay-starslab/issues/new?title=reroll+the+universe&amp;body=Press+%2A%2ASubmit+new+issue%2A%2A+and+a+bot+draws+a+new+sky%2C+galaxy+and+merger+for+the+profile+%28it+closes+this+issue+for+you%2C+usually+within+two+minutes%29."><img src="assets/chips/reroll.svg" height="40" alt="Roll a new universe"></a></p>
 <!-- APOD:END -->
 
 <!-- FOOTER:START -->
-<img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/footer-2026-11-12-b7e8ed.svg" width="100%" alt="An aurora over an observatory under tonight&#x27;s waxing crescent">
+<img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/footer-2026-11-13-9703dd.svg" width="100%" alt="An aurora over an observatory under tonight&#x27;s waxing crescent">
 <!-- FOOTER:END -->
 
 <p align="center">
