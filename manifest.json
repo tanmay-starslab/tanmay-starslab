@@ -1,0 +1,32 @@
+{
+ "apod": {
+  "date": "2026-11-14",
+  "title": "Apollo 12 and Surveyor 3"
+ },
+ "day": "2026-11-14",
+ "footer_title": "An aurora over an observatory under tonight's waxing crescent",
+ "hero": {
+  "arms": 2,
+  "barred": true,
+  "impact": 0.53,
+  "lines": [
+   "C IV",
+   "Fe II",
+   "Mg I",
+   "Mg II",
+   "Si IV"
+  ],
+  "pitch": 23,
+  "z_abs": 1.77,
+  "z_qso": 2.1
+ },
+ "merger": {
+  "merged": true,
+  "q": 0.64,
+  "retrograde": false
+ },
+ "plaque_title": "14 November 2026 \u00b7 NASA&#x27;s picture of the day \u2014 Apollo 12 and Surveyor 3 \u2014 \u00a9 Apollo 12, Alan Bean - Stereo Image Copyright: Kevin Frank | simulated today \u2014 two galaxies merge, mass ratio 1 : 0.64 \u2014 both disks spin with the orbit \u00b7 click it to roll a new one",
+ "roll": 0,
+ "seed": 113139883353818,
+ "version": "2026-11-14-2d1147"
+}
