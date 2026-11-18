@@ -1,7 +1,7 @@
 <!-- Blocks between START/END markers are rewritten by scripts/daily.py (the daily art and NASA's picture). -->
 
 <!-- HERO:START -->
-<img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/hero-2026-11-17-0f3fd4.svg" width="100%" alt="Today&#x27;s generated sky: a quasar at redshift 2.49 shines through the halo of a 4-armed spiral galaxy at redshift 1.12, and its light is drawn as a spectrum showing the galaxy&#x27;s Ca II, Fe II, Mg I and Mg II absorption lines.">
+<img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/hero-2026-11-18-31490c.svg" width="100%" alt="Today&#x27;s generated sky: a quasar at redshift 2.44 shines through the halo of a 3-armed spiral galaxy at redshift 1.16, and its light is drawn as a spectrum showing the galaxy&#x27;s Ca II, Fe II, Mg I and Mg II absorption lines.">
 <!-- HERO:END -->
 
 <p align="center"><img src="assets/typing.svg" width="100%" alt="tracing quasar light through galaxies; turning simulations into spectra; debugging at 3 a.m.; git push origin main"></p>
@@ -45,15 +45,15 @@ class Me(PhDStudent):
 
 <!-- APOD:START -->
 <p align="center">
-  <a href="https://science.nasa.gov/image-article/apod-2026-november-17-milky-way-versus-aurora/"><img src="https://assets.science.nasa.gov/content/dam/science/cds/apod/apod/2026/november/GalaxyVsAurora_Scheib_960.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg?w=1280&amp;h=1280&amp;fit=clip" width="48%" alt="A starry night sky is seen above water and some islands. In the night sky are two bright arches that are nearly vertical. On the left is the textured Milky Way and on the right is a  smoother ribbon of aurora. Please see the explanation for more detailed information."></a>
-  <a href="https://github.com/tanmay-starslab/tanmay-starslab/issues/new?title=reroll+the+universe&amp;body=Press+%2A%2ASubmit+new+issue%2A%2A+and+a+bot+draws+a+new+sky%2C+galaxy+and+merger+for+the+profile+%28it+closes+this+issue+for+you%2C+usually+within+two+minutes%29."><img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/merger-2026-11-17-0f3fd4.webp" width="48%" alt="Today&#x27;s simulated galaxy merger: two disk galaxies with mass ratio 1 to 0.80 collide, throw out tidal tails and merge. Click to roll a new universe."></a>
-  <img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/plaque-2026-11-17-0f3fd4.svg" width="97%" alt="17 November 2026 · NASA&#x27;s picture of the day — Milky Way versus Aurora — © Guillaume Scheib | simulated today — two galaxies merge, mass ratio 1 : 0.80 — both disks spin with the orbit · click it to roll a new one">
+  <a href="https://science.nasa.gov/image-article/apod-2026-november-18-an-m-class-solar-flare/"><img src="https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/november/solar_M_flare.jpg?w=1280&amp;h=1280&amp;fit=clip" width="48%" alt="A piece of the Sun takes up half the image. The Sun looks fuzzy and swirling with energetic hydrogen atoms. A bright and dark spot are visible on the Sun, associated with a sun spot. A wisp of hydrogen reaches off of the edge of the Sun."></a>
+  <a href="https://github.com/tanmay-starslab/tanmay-starslab/issues/new?title=reroll+the+universe&amp;body=Press+%2A%2ASubmit+new+issue%2A%2A+and+a+bot+draws+a+new+sky%2C+galaxy+and+merger+for+the+profile+%28it+closes+this+issue+for+you%2C+usually+within+two+minutes%29."><img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/merger-2026-11-18-31490c.webp" width="48%" alt="Today&#x27;s simulated galaxy merger: two disk galaxies with mass ratio 1 to 0.63 collide, throw out tidal tails and merge. Click to roll a new universe."></a>
+  <img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/plaque-2026-11-18-31490c.svg" width="97%" alt="18 November 2026 · NASA&#x27;s picture of the day — A Medium-Sized Solar Flare — © Mario Cogo | simulated today — two galaxies merge, mass ratio 1 : 0.63 — one disk spins against the orbit · click it to roll a new one">
 </p>
 <p align="center"><a href="https://github.com/tanmay-starslab/tanmay-starslab/issues/new?title=reroll+the+universe&amp;body=Press+%2A%2ASubmit+new+issue%2A%2A+and+a+bot+draws+a+new+sky%2C+galaxy+and+merger+for+the+profile+%28it+closes+this+issue+for+you%2C+usually+within+two+minutes%29."><img src="assets/chips/reroll.svg" height="40" alt="Roll a new universe"></a></p>
 <!-- APOD:END -->
 
 <!-- FOOTER:START -->
-<img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/footer-2026-11-17-0f3fd4.svg" width="100%" alt="An aurora over an observatory under tonight&#x27;s waxing gibbous">
+<img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/footer-2026-11-18-31490c.svg" width="100%" alt="An aurora over an observatory under tonight&#x27;s waxing gibbous">
 <!-- FOOTER:END -->
 
 <p align="center">
