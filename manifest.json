@@ -1,0 +1,31 @@
+{
+ "apod": {
+  "date": "2026-11-21",
+  "title": "Voyager's Neptune"
+ },
+ "day": "2026-11-21",
+ "footer_title": "An aurora over an observatory under tonight's waxing gibbous",
+ "hero": {
+  "arms": 2,
+  "barred": false,
+  "impact": 0.52,
+  "lines": [
+   "Ca II",
+   "Fe II",
+   "Mg I",
+   "Mg II"
+  ],
+  "pitch": 15,
+  "z_abs": 1.03,
+  "z_qso": 2.57
+ },
+ "merger": {
+  "merged": true,
+  "q": 0.82,
+  "retrograde": false
+ },
+ "plaque_title": "21 November 2026 \u00b7 NASA&#x27;s picture of the day \u2014 Voyager&#x27;s Neptune \u2014 \u00a9 Assembly/Processing - Rolf Olsen,Data - Voyager 2, NASA Planetary Data System | simulated today \u2014 two galaxies merge, mass ratio 1 : 0.82 \u2014 both disks spin with the orbit \u00b7 click it to roll a new one",
+ "roll": 0,
+ "seed": 245985904653575,
+ "version": "2026-11-21-791163"
+}
