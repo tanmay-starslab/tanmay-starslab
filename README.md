@@ -1,7 +1,7 @@
 <!-- Blocks between START/END markers are rewritten by scripts/daily.py (the daily art and NASA's picture). -->
 
 <!-- HERO:START -->
-<img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/hero-2026-11-20-262a9d.svg" width="100%" alt="Today&#x27;s generated sky: a quasar at redshift 2.49 shines through the halo of a 4-armed spiral galaxy at redshift 1.92, and its light is drawn as a spectrum showing the galaxy&#x27;s C IV, Fe II, Mg I and Mg II absorption lines.">
+<img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/hero-2026-11-21-791163.svg" width="100%" alt="Today&#x27;s generated sky: a quasar at redshift 2.57 shines through the halo of a 2-armed spiral galaxy at redshift 1.03, and its light is drawn as a spectrum showing the galaxy&#x27;s Ca II, Fe II, Mg I and Mg II absorption lines.">
 <!-- HERO:END -->
 
 <p align="center"><img src="assets/typing.svg" width="100%" alt="tracing quasar light through galaxies; turning simulations into spectra; debugging at 3 a.m.; git push origin main"></p>
@@ -45,15 +45,15 @@ class Me(PhDStudent):
 
 <!-- APOD:START -->
 <p align="center">
-  <a href="https://science.nasa.gov/image-article/apod-2026-november-20-v-g-r/"><img src="https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/november/IMG_4364N_Kyriazis.jpg?w=1280&amp;h=1280&amp;fit=clip" width="48%" alt="Time exposure of a flashlight beam tracing out Morse code for the letters V - G - R."></a>
-  <a href="https://github.com/tanmay-starslab/tanmay-starslab/issues/new?title=reroll+the+universe&amp;body=Press+%2A%2ASubmit+new+issue%2A%2A+and+a+bot+draws+a+new+sky%2C+galaxy+and+merger+for+the+profile+%28it+closes+this+issue+for+you%2C+usually+within+two+minutes%29."><img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/merger-2026-11-20-262a9d.webp" width="48%" alt="Today&#x27;s simulated galaxy merger: two disk galaxies with mass ratio 1 to 0.81 collide, throw out tidal tails and merge. Click to roll a new universe."></a>
-  <img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/plaque-2026-11-20-262a9d.svg" width="97%" alt="20 November 2026 · NASA&#x27;s picture of the day — V-G-R — © Apostolos Kyriazis | simulated today — two galaxies merge, mass ratio 1 : 0.81 — one disk spins against the orbit · click it to roll a new one">
+  <a href="https://science.nasa.gov/image-article/apod-2026-november-21-voyagers-neptune/"><img src="https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/november/Neptune-South-Pole-Voyager-2_2327x1670.jpg?w=1280&amp;h=1280&amp;fit=clip" width="48%" alt="Composite Voyager image of Neptune in a crescent phase."></a>
+  <a href="https://github.com/tanmay-starslab/tanmay-starslab/issues/new?title=reroll+the+universe&amp;body=Press+%2A%2ASubmit+new+issue%2A%2A+and+a+bot+draws+a+new+sky%2C+galaxy+and+merger+for+the+profile+%28it+closes+this+issue+for+you%2C+usually+within+two+minutes%29."><img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/merger-2026-11-21-791163.webp" width="48%" alt="Today&#x27;s simulated galaxy merger: two disk galaxies with mass ratio 1 to 0.82 collide, throw out tidal tails and merge. Click to roll a new universe."></a>
+  <img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/plaque-2026-11-21-791163.svg" width="97%" alt="21 November 2026 · NASA&#x27;s picture of the day — Voyager&#x27;s Neptune — © Assembly/Processing - Rolf Olsen,Data - Voyager 2, NASA Planetary Data System | simulated today — two galaxies merge, mass ratio 1 : 0.82 — both disks spin with the orbit · click it to roll a new one">
 </p>
 <p align="center"><a href="https://github.com/tanmay-starslab/tanmay-starslab/issues/new?title=reroll+the+universe&amp;body=Press+%2A%2ASubmit+new+issue%2A%2A+and+a+bot+draws+a+new+sky%2C+galaxy+and+merger+for+the+profile+%28it+closes+this+issue+for+you%2C+usually+within+two+minutes%29."><img src="assets/chips/reroll.svg" height="40" alt="Roll a new universe"></a></p>
 <!-- APOD:END -->
 
 <!-- FOOTER:START -->
-<img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/footer-2026-11-20-262a9d.svg" width="100%" alt="An aurora over an observatory under tonight&#x27;s waxing gibbous">
+<img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/footer-2026-11-21-791163.svg" width="100%" alt="An aurora over an observatory under tonight&#x27;s waxing gibbous">
 <!-- FOOTER:END -->
 
 <p align="center">
