@@ -63,6 +63,5 @@ class Me(PhDStudent):
   <a href="https://github.com/tanmay-starslab?tab=repositories"><img src="https://img.shields.io/github/stars/tanmay-starslab?affiliations=OWNER&style=flat-square&label=stars&labelColor=16161A&color=8B7BF5" alt="Stars"></a>
   <img src="assets/generated/moon.svg" alt="Tonight's moon phase">
   <img src="assets/generated/sunset.svg" alt="Sunset time in Tempe today">
-  <img src="https://img.shields.io/github/last-commit/tanmay-starslab/tanmay-starslab?style=flat-square&label=last%20refresh&labelColor=16161A&color=5FD6C4" alt="Last refresh">
   <a href="https://github.com/tanmay-starslab/tanmay-starslab/actions/workflows/refresh.yml"><img src="https://img.shields.io/github/actions/workflow/status/tanmay-starslab/tanmay-starslab/refresh.yml?style=flat-square&label=daily%20refresh&labelColor=16161A" alt="Daily refresh status"></a>
 </p>
