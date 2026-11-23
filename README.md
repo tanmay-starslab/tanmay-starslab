@@ -1,7 +1,7 @@
 <!-- Blocks between START/END markers are rewritten by scripts/daily.py (the daily art and NASA's picture). -->
 
 <!-- HERO:START -->
-<img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/hero-2026-11-22-ef2f04.svg" width="100%" alt="Today&#x27;s generated sky: a quasar at redshift 2.89 shines through the halo of a 2-armed spiral galaxy at redshift 0.88, and its light is drawn as a spectrum showing the galaxy&#x27;s Ca II, Fe II, Mg I and Mg II absorption lines.">
+<img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/hero-2026-11-23-88ecfd.svg" width="100%" alt="Today&#x27;s generated sky: a quasar at redshift 2.43 shines through the halo of a 3-armed spiral galaxy at redshift 0.97, and its light is drawn as a spectrum showing the galaxy&#x27;s Ca II, Fe II, Mg I and Mg II absorption lines.">
 <!-- HERO:END -->
 
 <p align="center"><img src="assets/typing.svg" width="100%" alt="tracing quasar light through galaxies; turning simulations into spectra; debugging at 3 a.m.; git push origin main"></p>
@@ -45,15 +45,15 @@ class Me(PhDStudent):
 
 <!-- APOD:START -->
 <p align="center">
-  <a href="https://science.nasa.gov/image-article/apod-2026-november-22-swirls-and-colors-on-jupiter-from-juno/"><img src="https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/november/JupiterSwirls_JunoBrealey_3709.jpg?w=1280&amp;h=1280&amp;fit=clip" width="48%" alt="A busy field of colorful clouds is pictured showing much interesting structure including many cloud swirls.  Please see the explanation for more detailed information."></a>
-  <a href="https://github.com/tanmay-starslab/tanmay-starslab/issues/new?title=reroll+the+universe&amp;body=Press+%2A%2ASubmit+new+issue%2A%2A+and+a+bot+draws+a+new+sky%2C+galaxy+and+merger+for+the+profile+%28it+closes+this+issue+for+you%2C+usually+within+two+minutes%29."><img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/merger-2026-11-22-ef2f04.webp" width="48%" alt="Today&#x27;s simulated galaxy merger: two disk galaxies with mass ratio 1 to 0.77 collide, throw out tidal tails and merge. Click to roll a new universe."></a>
-  <img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/plaque-2026-11-22-ef2f04.svg" width="97%" alt="22 November 2026 · NASA&#x27;s picture of the day — Swirls and Colors on Jupiter from Juno — © NASA, Juno, SwRI, MSSS; Processing &amp; License: Matt Brealey, Seán Doran | simulated today — two galaxies merge, mass ratio 1 : 0.77 — both disks spin with the orbit · click it to roll a new one">
+  <a href="https://science.nasa.gov/image-article/apod-2026-november-23-the-emergence-of-dark-nebula-lynds-1251/"><img src="https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/november/Ldn1251Comparison_Cruz_2160.jpg?w=1280&amp;h=1280&amp;fit=clip" width="48%" alt="Six panels of images, all of the same spot in the sky taken at different points in a long exposure of a faint object. The top left panel is the earliest image, taken 4 minutes into the exposure. There is a very faint wisp of dark material slightly blocking the background smattering of stars. With each successive panel, the dark wisp becomes more and more pronounced. The final image in the bottom right contains all the light collected over 20 hours. The shape and details of the dark nebula are captured in striking detail. It looks like a cloud of smoke drifting across the sky."></a>
+  <a href="https://github.com/tanmay-starslab/tanmay-starslab/issues/new?title=reroll+the+universe&amp;body=Press+%2A%2ASubmit+new+issue%2A%2A+and+a+bot+draws+a+new+sky%2C+galaxy+and+merger+for+the+profile+%28it+closes+this+issue+for+you%2C+usually+within+two+minutes%29."><img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/merger-2026-11-23-88ecfd.webp" width="48%" alt="Today&#x27;s simulated galaxy merger: two disk galaxies with mass ratio 1 to 0.99 collide, throw out tidal tails and merge. Click to roll a new universe."></a>
+  <img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/plaque-2026-11-23-88ecfd.svg" width="97%" alt="23 November 2026 · NASA&#x27;s picture of the day — The Emergence of Dark Nebula Lynds 1251 — © David Cruz | simulated today — two galaxies merge, mass ratio 1 : 0.99 — one disk spins against the orbit · click it to roll a new one">
 </p>
 <p align="center"><a href="https://github.com/tanmay-starslab/tanmay-starslab/issues/new?title=reroll+the+universe&amp;body=Press+%2A%2ASubmit+new+issue%2A%2A+and+a+bot+draws+a+new+sky%2C+galaxy+and+merger+for+the+profile+%28it+closes+this+issue+for+you%2C+usually+within+two+minutes%29."><img src="assets/chips/reroll.svg" height="40" alt="Roll a new universe"></a></p>
 <!-- APOD:END -->
 
 <!-- FOOTER:START -->
-<img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/footer-2026-11-22-ef2f04.svg" width="100%" alt="An aurora over an observatory under tonight&#x27;s waxing gibbous">
+<img src="https://raw.githubusercontent.com/tanmay-starslab/tanmay-starslab/daily-art/footer-2026-11-23-88ecfd.svg" width="100%" alt="An aurora over an observatory under tonight&#x27;s full moon">
 <!-- FOOTER:END -->
 
 <p align="center">
