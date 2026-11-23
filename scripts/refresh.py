@@ -275,16 +275,19 @@ def sky_badges(day: dt.date) -> dict[str, str]:
 # counts a visit; query_only reads the total without adding one.
 COUNTER = "https://visitor-badge.laobi.icu/badge?page_id=tanmay-starslab.tanmay-starslab&query_only=true"
 VISITS = ROOT / "data" / "visits.json"
+# The counter cannot be reset, so the badge counts from its total on 2026-11-23.
+COUNTER_BASELINE = 316
 
 
 def fetch_visits() -> int:
-    return int(re.findall(r">([\d,]+)<", http(COUNTER).decode())[-1].replace(",", ""))
+    raw = int(re.findall(r">([\d,]+)<", http(COUNTER).decode())[-1].replace(",", ""))
+    return max(raw - COUNTER_BASELINE, 0)
 
 
 def record_visits(day: dt.date, total: int | None) -> dict[str, int]:
     """The running total at the first refresh of each day, kept forever in data/visits.json.
 
-    It starts with 2026-10-14: 0, the day the counter was added to the README.
+    It starts with 2026-11-23: 0, the day the count restarted (see COUNTER_BASELINE).
     """
     history = json.loads(VISITS.read_text(encoding="utf-8")) if VISITS.exists() else {}
     if total is not None and day.isoformat() not in history:
