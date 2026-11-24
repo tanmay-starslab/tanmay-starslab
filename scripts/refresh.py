@@ -57,6 +57,8 @@ GITHUB_QUERY = """
 query($login: String!) {
   user(login: $login) {
     pullRequests { totalCount }
+    followers { totalCount }
+    starred: repositories(ownerAffiliations: OWNER, privacy: PUBLIC, first: 100) { nodes { stargazerCount } }
     repositories(ownerAffiliations: OWNER, isFork: false, privacy: PUBLIC) { totalCount }
     contributionsCollection {
       contributionCalendar {
@@ -86,6 +88,8 @@ def fetch_github() -> dict:
     return {
         "pull_requests": user["pullRequests"]["totalCount"],
         "repo_count": user["repositories"]["totalCount"],
+        "followers": user["followers"]["totalCount"],
+        "stars": sum(r["stargazerCount"] for r in user["starred"]["nodes"]),
         "total_contributions": calendar["totalContributions"],
         "days": [[d["date"], d["contributionCount"]] for w in calendar["weeks"] for d in w["contributionDays"]],
     }
@@ -259,6 +263,21 @@ def moon_icon(phase: float) -> str:
             f'<circle r="{r}" fill="none" stroke="#16161A" stroke-width=".6"/>')
 
 
+def people_badges(gh: dict) -> dict[str, str]:
+    """Followers and stars, drawn here rather than by shields.io, whose badges behind GitHub's
+    image proxy can time out into broken images."""
+    return {f"{key}.svg": badge(key, num(gh[key]), "#8B7BF5", False)
+            for key in ("followers", "stars") if key in gh}
+
+
+def refresh_badge(day: dt.date) -> str:
+    """The date of the last refresh. It reaches the README only when the whole run succeeds and
+    pushes, so a stale date means the refresh is failing. (The shields.io workflow badge it
+    replaces timed out behind GitHub's image proxy and showed as a broken image.)"""
+    return badge("daily refresh", f"✓ {day:%b} {day.day}", "#5FD6C4", True,
+                 title=f"Profile last refreshed on {day:%-d %B %Y}")
+
+
 def sky_badges(day: dt.date) -> dict[str, str]:
     phase, lit, name = moon_tonight(day)
     sun = sunset(day, *TEMPE)
@@ -353,9 +372,12 @@ def main() -> int:
     sky = cached("apod", fetch_apod)
     if gh:
         write(GENERATED / "stats.svg", stats_figure(gh))
+        for name, svg in people_badges(gh).items():
+            write(GENERATED / name, svg)
     for name, svg in sky_badges(dt.datetime.now(MST).date()).items():
         write(GENERATED / name, svg)
     today = dt.datetime.now(MST).date()
+    write(GENERATED / "refresh.svg", refresh_badge(today))
     try:
         total = fetch_visits()
     except Exception as exc:  # noqa: BLE001 - keep yesterday's badge

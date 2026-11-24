@@ -195,6 +195,17 @@ class SkyBadges(unittest.TestCase):
         sun = refresh.sunset(dt.date(2026, 6, 21), *refresh.TEMPE)
         self.assertTrue(19 <= sun.hour <= 20)
 
+    def test_people_badges(self) -> None:
+        badges = refresh.people_badges({"followers": 7, "stars": 1234})
+        self.assertIn(">7<", badges["followers.svg"])
+        self.assertIn(">1\u2009234<", badges["stars.svg"])
+        self.assertEqual(refresh.people_badges({}), {})
+
+    def test_refresh_badge_shows_the_date(self) -> None:
+        svg = refresh.refresh_badge(dt.date(2026, 11, 4))
+        ET.fromstring(svg)
+        self.assertIn("✓ Nov 4", svg)
+
 
 VISITS_DAY = dt.date(2026, 11, 30)
 # 3 visits a day for a month, then 10 a day for the last week.
