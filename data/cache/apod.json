@@ -1,9 +1,9 @@
 {
- "alt": "See Explanation.  Clicking on the picture will download the highest resolution version available.",
- "credit": "Roberto Marinoni",
- "date": "2026-11-24",
- "image": "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/november/NGC7771group_Marinoni_1179.jpg?w=1280&h=1280&fit=clip",
+ "alt": "The video captures the plane of the Milky Way where the plane runs through the horizontal center. There is a bright bulge at the center where a bunch of stars are clustered. Stars dot the sky above and below the plane. The video cycles through the different colors that SPHEREx captures. Some colors show that the starlight near the Milky Way center is mostly blocked by dust along the plane. Other colors are able to travel through the dust and reach SPHEREx, giving a clearer view of the brighter Milky Way center.",
+ "credit": "Credit: NASA/JPL-Caltech SPHEREx; data from NASA/IPAC IRSA. Processing: The Bright Nobles (Muhammet Mücahit Soylu, Serdar Aydın, Furkan Küpeli), ChronosphereX (chronospherex.com).",
+ "date": "2026-11-25",
+ "image": "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/november/spherex_1.2micron.png?w=1280&h=1280&fit=clip",
  "kind": "image",
- "link": "https://science.nasa.gov/image-article/apod-2026-november-24-galaxies-battle-in-the-ngc-7771-group/",
- "title": "Galaxies Battle in the NGC 7771 Group"
+ "link": "https://science.nasa.gov/image-article/apod-2026-november-25-spherex-seeing-through-dust/",
+ "title": "SPHEREx Seeing Through Dust"
 }
