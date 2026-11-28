@@ -1,0 +1,31 @@
+{
+ "apod": {
+  "date": "2026-11-28",
+  "title": "Apollo 17 VIP Site Anaglyph"
+ },
+ "day": "2026-11-28",
+ "footer_title": "An aurora over an observatory under tonight's waning gibbous",
+ "hero": {
+  "arms": 4,
+  "barred": false,
+  "impact": 0.69,
+  "lines": [
+   "Ca II",
+   "Fe II",
+   "Mg I",
+   "Mg II"
+  ],
+  "pitch": 20,
+  "z_abs": 1.03,
+  "z_qso": 2.78
+ },
+ "merger": {
+  "merged": true,
+  "q": 0.59,
+  "retrograde": false
+ },
+ "plaque_title": "28 November 2026 \u00b7 NASA&#x27;s picture of the day \u2014 Apollo 17 VIP Site Anaglyph \u2014 \u00a9 Gene Cernan, Apollo 17, NASA; Anaglyph by Erik van Meijgaarden | simulated today \u2014 two galaxies merge, mass ratio 1 : 0.59 \u2014 both disks spin with the orbit \u00b7 click it to roll a new one",
+ "roll": 0,
+ "seed": 7421559534947,
+ "version": "2026-11-28-df5fe9"
+}
